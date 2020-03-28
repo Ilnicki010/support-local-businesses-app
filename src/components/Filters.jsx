@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Checkbox from "./Checkbox";
 
-const items = ["One", "Two", "Three"];
-
 class Filters extends Component {
   componentWillMount = () => {
     this.selectedCheckboxes = new Set();
+    this.props.filterList.forEach(item => {
+      if (item.selected) this.selectedCheckboxes.add(item.value);
+    });
+    this.filteredValuesHandler();
   };
 
   toggleCheckbox = label => {
@@ -14,6 +16,14 @@ class Filters extends Component {
     } else {
       this.selectedCheckboxes.add(label);
     }
+    this.filteredValuesHandler();
+  };
+
+  // send a list of CSV filters back to the callback
+  filteredValuesHandler = () => {
+    const selectedArray = [];
+    this.selectedCheckboxes.forEach(item => selectedArray.push(item));
+    this.props.filteredValuesHandler(selectedArray.join(","));
   };
 
   handleFormSubmit = formSubmitEvent => {
@@ -24,29 +34,24 @@ class Filters extends Component {
     }
   };
 
-  createCheckbox = label => (
+  createCheckboxes = () => this.props.filterList.map(this.createCheckbox);
+
+  createCheckbox = checkboxObj => (
     <Checkbox
-      label={label}
+      label={checkboxObj.display}
       handleCheckboxChange={this.toggleCheckbox}
-      key={label}
+      value={checkboxObj.value}
+      key={checkboxObj.value}
+      selected={checkboxObj.selected || false}
     />
   );
 
-  createCheckboxes = () => items.map(this.createCheckbox);
-
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <form onSubmit={this.handleFormSubmit}>
-              {this.createCheckboxes()}
-
-              <button className="btn btn-default" type="submit">
-                Save
-              </button>
-            </form>
-          </div>
+      <div className="filters-container">
+        <div className="filters-header-row">Filter by:</div>
+        <div className="filters-row">
+          <div className="filters-col">{this.createCheckboxes()}</div>
         </div>
       </div>
     );
