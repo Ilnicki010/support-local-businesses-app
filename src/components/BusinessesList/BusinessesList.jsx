@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "./BusinessesList.module.scss";
+import Button from "../Button/Button";
 
 const BusinessesList = ({ listOfPlaces }) => {
   const style = (photoRef) => ({
     background: `url(https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=1600&maxwidth=1600&key=${process.env.REACT_APP_GOOGLE_API_KEY})`,
   });
+
   return (
     <ul>
       {listOfPlaces.map((place) => (
@@ -19,7 +21,9 @@ const BusinessesList = ({ listOfPlaces }) => {
               {place.vicinity}
             </span>
           </div>
-          <button>Donate</button>
+          <div className={styles.buttonWrapper}>
+            <Button>Donate</Button>
+          </div>
         </li>
       ))}
     </ul>
