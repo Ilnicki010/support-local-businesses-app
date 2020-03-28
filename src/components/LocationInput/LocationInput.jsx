@@ -16,7 +16,7 @@ class LocationInput extends React.Component {
   handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .then((latLng) => this.props.getLatLng(latLng))
+      .then((latLng) => this.props.getLocationInfo(latLng, address))
       .catch((error) => console.error("Error", error));
   };
 
