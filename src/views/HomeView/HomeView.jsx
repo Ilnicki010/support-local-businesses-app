@@ -1,8 +1,13 @@
 import React from "react";
 import axios from "axios";
+import Airtable from "airtable";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
+
+const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
+  "app7LKgKsFtsq1x8D"
+);
 
 class HomeView extends React.Component {
   state = {
@@ -14,18 +19,44 @@ class HomeView extends React.Component {
       },
     },
     resultPlaces: [],
+    loading: false,
   };
 
   findPlaces = () => {
+    this.setState({
+      loading: true,
+    });
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&type=restaurant`
       )
       .then((data) => {
-        this.setState({
-          resultPlaces: data.data.results,
+        data.data.results.map((place) => {
+          this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+            this.setState((prevState) => ({
+              loading: false,
+              resultPlaces: [
+                {
+                  place,
+                  gofundmeURL: gofundmeURL || null,
+                },
+                ...prevState.resultPlaces,
+              ],
+            }));
+          });
         });
       });
+  };
+
+  checkIsPlaceInDB = (place) => {
+    return new Promise((resolve, reject) => {
+      base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
+        if (err) reject(err);
+        record.fields.google_places_id === place.id
+          ? resolve(record.fields.gofundme_url)
+          : resolve(null);
+      });
+    });
   };
 
   getLocation = (latlng, address) => {
@@ -64,6 +95,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList listOfPlaces={this.state.resultPlaces} />
             )}
+            {this.state.loading && <span>loading...</span>}
           </div>
           <div />
         </div>

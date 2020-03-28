@@ -2,7 +2,6 @@ import React from "react";
 
 import PlacesAutocomplete, {
   geocodeByAddress,
-  geocodeByPlaceId,
   getLatLng,
 } from "react-places-autocomplete";
 import styles from "./LocationInput.module.scss";
@@ -42,7 +41,6 @@ class LocationInput extends React.Component {
                 const className = suggestion.active
                   ? styles.suggestionItemActive
                   : styles.suggestionItem;
-                // inline style for demonstration purpose
 
                 return (
                   <div
