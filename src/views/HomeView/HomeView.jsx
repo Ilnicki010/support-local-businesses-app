@@ -43,16 +43,21 @@ class HomeView extends React.Component {
 
   render() {
     return (
-      <main>
-        <span>{`Search results for bussiness in ${this.state.searchQuery.location.name}`}</span>
-        <div>
-          <LocationInput
-            getLocationInfo={(latlng, address) =>
-              this.getLocation(latlng, address)
-            }
-          />
-          <input type="text" />
-        </div>
+      <main className={styles.siteWrapper}>
+        <header className={styles.siteHeader}>
+          <span
+            className={styles.siteHeaderTitle}
+          >{`Search results for bussiness in ${this.state.searchQuery.location.name}`}</span>
+          <div className={styles.inputsWrapper}>
+            {" "}
+            <LocationInput
+              getLocationInfo={(latlng, address) =>
+                this.getLocation(latlng, address)
+              }
+            />
+            <input type="text" />
+          </div>
+        </header>
         <div className={styles.contentWrapper}>
           <div />
           <div>

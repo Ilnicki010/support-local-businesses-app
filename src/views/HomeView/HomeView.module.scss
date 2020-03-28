@@ -1,5 +1,37 @@
+.siteWrapper{
+   
+}
 .contentWrapper{
     display: grid;
     grid-template-columns: 10% 1fr 1fr;
-    gap: 20px; 
+    gap: 20px;
+}
+.siteHeader{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 50px 10vw;
+    &Title{
+        font-weight: 700;
+        font-size: 1.7em;
+        margin: 10px 0;
+        text-decoration: underline;
+    }
+    .inputsWrapper{
+        display: flex;
+        input{
+            padding: 15px 20px;
+            margin: 5px;
+            width: 20vw;
+            border-radius: 5px;
+            border: 1px solid lightgray;
+            font-size: 1rem;
+            &:focus{
+                box-shadow:none;
+                outline: none;
+                border:1px solid #666
+            }
+        }
+    }
 }

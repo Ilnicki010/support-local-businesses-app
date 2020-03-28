@@ -1,0 +1,15 @@
+.autocompleteDropdown{
+    position: absolute;
+    width: 100%;
+}
+.suggestionItem{
+    padding: 15px 10px;
+    margin: 5px 0;
+    background: #fbfbfb;
+    text-align: left;
+    &Active{
+        @extend .suggestionItem;
+        background: #ffc8c8;
+        cursor: pointer;
+    }
+}

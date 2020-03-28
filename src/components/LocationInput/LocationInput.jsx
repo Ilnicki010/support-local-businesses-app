@@ -5,6 +5,7 @@ import PlacesAutocomplete, {
   geocodeByPlaceId,
   getLatLng,
 } from "react-places-autocomplete";
+import styles from "./LocationInput.module.scss";
 
 class LocationInput extends React.Component {
   state = { address: "" };
@@ -28,28 +29,25 @@ class LocationInput extends React.Component {
         onSelect={this.handleSelect}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
+          <div style={{ position: "relative" }}>
             <input
               {...getInputProps({
                 placeholder: "Search Places ...",
                 className: "location-search-input",
               })}
             />
-            <div className="autocomplete-dropdown-container">
+            <div className={styles.autocompleteDropdown}>
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => {
                 const className = suggestion.active
-                  ? "suggestion-item--active"
-                  : "suggestion-item";
+                  ? styles.suggestionItemActive
+                  : styles.suggestionItem;
                 // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                  : { backgroundColor: "#ffffff", cursor: "pointer" };
+
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
                       className,
-                      style,
                     })}
                   >
                     <span>{suggestion.description}</span>
