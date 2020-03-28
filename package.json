@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@turf/circle": "^6.0.1",
     "@turf/turf": "^5.1.6",
+    "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "mapbox-gl": "^1.9.0",
     "react": "^16.13.1",

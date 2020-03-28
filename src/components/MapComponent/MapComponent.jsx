@@ -1,12 +1,13 @@
 import React from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 
-import * as turf from "@turf/turf";
 import styles from "./MapComponent.module.scss";
 
 class MapComponent extends React.Component {
   state = {
     viewport: {
+      latitude: this.props.userLocation.lat,
+      longitude: this.props.userLocation.long,
       width: "100%",
       height: "40vh",
       zoom: 10,
@@ -15,13 +16,11 @@ class MapComponent extends React.Component {
 
   render() {
     const { viewport } = this.state;
-    const { userLocation, places } = this.props;
+    const { places, selectedPlace } = this.props;
     return (
       <div>
         <ReactMapGL
           {...viewport}
-          latitude={userLocation.lat}
-          longitude={userLocation.long}
           mapStyle="mapbox://styles/mapbox/light-v9"
           onViewportChange={(viewportChange) =>
             this.setState({ viewport: viewportChange })
@@ -35,9 +34,20 @@ class MapComponent extends React.Component {
               offsetLeft={-20}
               offsetTop={-10}
             >
-              <div className={styles.marker} />
+              <div
+                className={styles.marker}
+                onClick={() => this.props.handleSelectedPlace(place)}
+              />
             </Marker>
           ))}
+          {selectedPlace && (
+            <Popup
+              latitude={parseFloat(selectedPlace.geometry.location.lat)}
+              longitude={parseFloat(selectedPlace.geometry.location.lng)}
+            >
+              {selectedPlace.name}
+            </Popup>
+          )}
         </ReactMapGL>
       </div>
     );
