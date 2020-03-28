@@ -3,8 +3,9 @@
 }
 .contentWrapper{
     display: grid;
+    padding: 0 5vw;
     grid-template-columns: 10% 1fr 1fr;
-    gap: 20px;
+    gap: 40px;
 }
 .siteHeader{
     display: flex;

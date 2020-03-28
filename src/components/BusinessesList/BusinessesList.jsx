@@ -12,11 +12,11 @@ const BusinessesList = ({ listOfPlaces }) => {
         <li className={styles.listElement}>
           <div
             className={styles.image}
-            style={
-              placeObject.place.photos
-                ? style(placeObject.place.photos[0].photo_reference)
-                : null
-            }
+            // style={
+            //   placeObject.place.photos
+            //     ? style(placeObject.place.photos[0].photo_reference)
+            //     : null
+            // }
           />
           <div className={styles.listElementContent}>
             <h3>{placeObject.place.name}</h3>

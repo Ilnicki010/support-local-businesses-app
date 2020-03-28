@@ -7,7 +7,7 @@ class MapComponent extends React.Component {
   state = {
     viewport: {
       latitude: this.props.userLocation.lat,
-      longitude: this.props.userLocation.long,
+      longitude: this.props.userLocation.lng,
       width: "100%",
       height: "40vh",
       zoom: 10,
@@ -29,8 +29,8 @@ class MapComponent extends React.Component {
         >
           {places.map((place) => (
             <Marker
-              latitude={place.geometry.location.lat}
-              longitude={place.geometry.location.lng}
+              latitude={place.place.geometry.location.lat}
+              longitude={place.place.geometry.location.lng}
               offsetLeft={-20}
               offsetTop={-10}
             >

@@ -4,6 +4,7 @@ import Airtable from "airtable";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
+import MapComponent from "../../components/MapComponent/MapComponent";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
@@ -97,7 +98,14 @@ class HomeView extends React.Component {
             )}
             {this.state.loading && <span>loading...</span>}
           </div>
-          <div />
+          <div>
+            {this.state.searchQuery.location.lat && (
+              <MapComponent
+                userLocation={this.state.searchQuery.location}
+                places={this.state.resultPlaces}
+              />
+            )}
+          </div>
         </div>
       </main>
     );
