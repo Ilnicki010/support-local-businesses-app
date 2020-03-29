@@ -6,13 +6,21 @@ import { SHOW_IMAGES } from "../../constants";
 class BusinessesList extends Component {
   state = { activePlace: null };
 
-  handleShowYourSupport = id => {
+  baseState = this.state;
+
+  handleShowYourSupport = (place) => {
     this.setState({
-      activePlace: id
+      activePlace: { ...place },
     });
   };
 
-  submitSupport = e => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.activePlace !== this.state.activePlace) {
+      this.props.getActivePlace(this.state.activePlace);
+    }
+  }
+
+  submitSupport = (e) => {
     e.preventDefault();
     console.log(e);
 
@@ -51,15 +59,14 @@ class BusinessesList extends Component {
                 <Button href={placeObject.gofundmeURL}>Donate</Button>
               ) : (
                 <Button
-                  onClick={() =>
-                    this.handleShowYourSupport(placeObject.place.id)
-                  }
+                  onClick={() => this.handleShowYourSupport(placeObject.place)}
                 >
                   Support
                 </Button>
               )}
             </div>
-            {this.state.activePlace === placeObject.place.id && (
+            {this.state.activePlace &&
+            this.state.activePlace.id === placeObject.place.id ? (
               <div className={styles.formWrapper}>
                 <div className={styles.headerCard}>
                   <span className={styles.headerCardTitle}>
@@ -68,7 +75,7 @@ class BusinessesList extends Component {
                   <button
                     className={styles.closeButton}
                     type="submit"
-                    onClick={() => this.setState({ activePlace: null })}
+                    onClick={() => this.setState(this.baseState)}
                   >
                     Cancel
                   </button>
@@ -93,8 +100,8 @@ class BusinessesList extends Component {
                   <Button type="submit">Send</Button>
                 </form>
               </div>
-            )}
-          </div>
+            ) : null}
+          </li>
         ))}
       </div>
     );
