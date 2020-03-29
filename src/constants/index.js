@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+export const PLACEHOLDER_TEXT = "some text";
 export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges
 export const PLACEHOLDER_TEXT = "Enter a keyword or select a category";
 export const NOT_READY_TO_SEARCH =
@@ -12,7 +13,7 @@ export const FILTER_LIST = [
   {
     label: "Clothing Stores",
     value: "clothing_store",
-    selected: true
+    selected: true,
   },
   { label: "Beauty Salons", value: "beauty_salon", selected: true },
   { label: "Hair Care", value: "hair_care", selected: true },
@@ -21,8 +22,8 @@ export const FILTER_LIST = [
   {
     label: "Grocery/Supermarket",
     value: "grocery_or_supermarket",
-    selected: true
-  }
+    selected: true,
+  },
   /*
   { label: "ac,coun,ting", value: "accounting", selected: false },
   { label: "airport", value: "airport", selected: false },

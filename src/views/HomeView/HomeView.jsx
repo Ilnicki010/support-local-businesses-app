@@ -19,18 +19,18 @@ class HomeView extends React.Component {
       location: {
         name: "",
         lat: null,
-        lng: null
-      }
+        lng: null,
+      },
     },
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null
+    activePlace: null,
   };
 
   placeType = {
     label: "",
-    value: ""
+    value: "",
   };
 
   freeTextSearch = "";
@@ -53,7 +53,7 @@ class HomeView extends React.Component {
   findPlaces = () => {
     this.setState({
       resultPlaces: [],
-      loading: true
+      loading: true,
     });
     let uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=8000`;
     if (this.placeType.value) {
@@ -62,26 +62,26 @@ class HomeView extends React.Component {
       if (this.freeTextSearch) uri += "&keyword=" + this.freeTextSearch;
     }
     console.log(uri);
-    axios.get(uri).then(data => {
-      data.data.results.forEach(place => {
-        this.checkIsPlaceInDB(place).then(gofundmeURL => {
-          this.setState(prevState => ({
+    axios.get(uri).then((data) => {
+      data.data.results.forEach((place) => {
+        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+          this.setState((prevState) => ({
             loading: false,
             resultPlaces: [
               {
                 place,
-                gofundmeURL: gofundmeURL || null
+                gofundmeURL: gofundmeURL || null,
               },
-              ...prevState.resultPlaces
+              ...prevState.resultPlaces,
             ],
-            filteredPlaces: this.state.resultPlaces
+            filteredPlaces: this.state.resultPlaces,
           }));
         });
       });
     });
   };
 
-  checkIsPlaceInDB = place => {
+  checkIsPlaceInDB = (place) => {
     return new Promise((resolve, reject) => {
       base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
         if (err) reject(err);
@@ -98,19 +98,20 @@ class HomeView extends React.Component {
         location: {
           name: address,
           lat: latlng.lat,
-          lng: latlng.lng
-        }
+          lng: latlng.lng,
+        },
       },
       resultPlaces: [],
       filteredPlaces: [],
-      loading: false
+      loading: false,
     });
     this.checkForReadyToSearch();
   };
 
-  startSearch = event => {
+  submitSearch = (event) => {
+    if (event) event.preventDefault();
     this.findPlaces();
-    console.log(event ? event : "auto-submitting");
+    console.log(event || "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
@@ -162,7 +163,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}
-                getActivePlace={place =>
+                getActivePlace={(place) =>
                   this.setState({ activePlace: { ...place } })
                 }
               />
