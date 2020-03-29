@@ -6,13 +6,13 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 
 ### core features:
 - [ ] Would be really cool if, after you submit your email address, that button turns green and from "Support" to "Supporter"
+- [ ] Map: Hovers on top of businesses and click scrolls you to that business and pops open the Support section
 - [x] Integrate map
 - [ ] Clam your business/Add campaign - link to Airtable form
 - [x] Integrate airtable with support the business form
 - [x] Filters
 - [x] Zooming in on map changes search
 - [x] Change screen update so that results are added onto the bottom of the array
-- [ ] Delete node_modules folder and run just to make sure all the required files are in package.json
 - [ ] Add to instructions, especially related to .env and keys and Airtable accounts, etc.
 
 ### bugs
@@ -23,6 +23,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] Do not use setState in componentDidUpdate. work-with-map branch need closer look and refactor ( zoom to the point feature)
 
 ### improvements
+- [ ] Map: auto-scale the map to match the actual results of the search so the used area is as big as possible
 - [ ] Need to add a captcha for the email submission
 - [ ] Find/scrape campaign info binded with a place and put it to the Airtable as a starting point
 - [ ] Update "Supported" logos on page with results of the ones you have supported already (for return visitors)
@@ -33,6 +34,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] Move some logic to the back end eg. Airtable search
 - [ ] Add props validation
 - [ ] Lint all the components/views
+- [ ] Delete node_modules folder and run just to make sure all the required files are in package.json
 
 ## tech stack
 
@@ -42,6 +44,12 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - axios v0.19.2
 - airtable v0.8.1
 - node-sass v.4.13.1
+- react-select v.3.1.0
+- d3-ease v1.0.6
+- react-places
+- react-places-autocomplete
+- turf-point
+- ...a lot of React 
 
 ## npm scripts
 
