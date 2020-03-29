@@ -6,7 +6,7 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST } from "../../constants";
+import { FILTER_LIST, NOT_READY_TO_SEARCH } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
@@ -33,11 +33,20 @@ class HomeView extends React.Component {
     value: ""
   };
 
-  checkForReadyToSearch = () => {
+  freeTextSearch = "";
+
+  checkForReadyToSearch = (event = null) => {
+    if (event) event.preventDefault();
     const sq = this.state.searchQuery;
-    if ((sq.location.name || sq.location.lat) && this.placeType.value) {
+    if (
+      (sq.location.name || sq.location.lat) &&
+      (this.placeType.value || this.freeTextSearch)
+    ) {
       // we have some new data, so let's click search for them
-      this.submitSearch(null);
+      this.startSearch(null);
+    } else {
+      // do nothing --
+      // alert(NOT_READY_TO_SEARCH);
     }
   };
 
@@ -46,7 +55,12 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true
     });
-    const uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
+    let uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=8000`;
+    if (this.placeType.value) {
+      uri += "&types=" + this.placeType.value;
+    } else {
+      if (this.freeTextSearch) uri += "&keyword=" + this.freeTextSearch;
+    }
     console.log(uri);
     axios.get(uri).then(data => {
       data.data.results.forEach(place => {
@@ -94,15 +108,19 @@ class HomeView extends React.Component {
     this.checkForReadyToSearch();
   };
 
-  submitSearch = event => {
-    if (event) event.preventDefault();
+  startSearch = event => {
     this.findPlaces();
     console.log(event ? event : "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = placeType => {
-    this.placeType = { value: placeType.value, label: placeType.label };
+  getFilteredValues = (placeType, isCategorySelect) => {
+    if (isCategorySelect) {
+      this.placeType = { value: placeType.value, label: placeType.label };
+    } else {
+      this.freeTextSearch = placeType.text;
+      this.placeType = {};
+    }
     this.checkForReadyToSearch();
   };
 
@@ -111,7 +129,7 @@ class HomeView extends React.Component {
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
           <form
-            onSubmit={event => this.submitSearch(event)}
+            onSubmit={event => this.checkForReadyToSearch(event)}
             className={styles.inputsWrapper}
           >
             <div style={{ flex: "2" }}>
@@ -136,7 +154,9 @@ class HomeView extends React.Component {
           <section>
             <h2 className={styles.resultsTitle}>
               {this.state.resultPlaces.length > 0
-                ? `Search results for '${this.placeType.label}' near '${this.state.searchQuery.location.name}'`
+                ? `Search results for '${
+                    this.placeType.label || this.freeTextSearch
+                  }' near '${this.state.searchQuery.location.name}'`
                 : ""}
             </h2>
             {this.state.resultPlaces && (

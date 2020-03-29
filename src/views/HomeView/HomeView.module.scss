@@ -2,12 +2,12 @@
 }
 .contentWrapper {
   display: grid;
-  grid-template-columns:  1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 30px;
-padding: 5vh 5vw;
+  padding: 5vh 5vw;
 }
 .resultsTitle {
-  font-weight: 700;
+  font-weight: 400;
   font-size: 1.7em;
   margin: 20px 20px 0;
   text-align: left;
@@ -25,8 +25,8 @@ padding: 5vh 5vw;
     justify-content: center;
     height: 100%;
     width: 100%;
-    *{
-        margin: 0 5px;
+    * {
+      margin: 0 5px;
     }
   }
 }
