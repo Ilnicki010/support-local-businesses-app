@@ -11,14 +11,15 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] Clam your business/Add campaign - link to Airtable form
 - [ ] Find/scrape campaign info binded with a place and put it to the Airtable as a starting point
 - [x] Filters
-- [ ] Zooming in on map changes search
-- [ ] Change screen update so that results are added onto the bottom of the array
+- [x] Zooming in on map changes search
+- [x] Change screen update so that results are added onto the bottom of the array
 - [ ] Delete node_modules folder and run just to make sure all the required files are in package.json
 - [ ] Add to instructions, especially related to .env and keys and Airtable accounts, etc.
 
 ### bugs
 
 - [x] Display images
+- [ ] Do not use setState in componentDidUpdate. work-with-map branch need closer look and refactor ( zoom to the point feature)
 
 ### improvements
 

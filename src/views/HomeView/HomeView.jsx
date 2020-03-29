@@ -25,6 +25,7 @@ class HomeView extends React.Component {
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
+    activePlace: null,
   };
 
   placeType = {
@@ -126,7 +127,12 @@ class HomeView extends React.Component {
                 : ""}
             </h2>
             {this.state.resultPlaces && (
-              <BusinessesList listOfPlaces={this.state.resultPlaces} />
+              <BusinessesList
+                listOfPlaces={this.state.resultPlaces}
+                getActivePlace={(place) =>
+                  this.setState({ activePlace: { ...place } })
+                }
+              />
             )}
             {this.state.loading && <span>loading...</span>}
           </section>
@@ -135,6 +141,7 @@ class HomeView extends React.Component {
               <MapComponent
                 userLocation={this.state.searchQuery.location}
                 places={this.state.resultPlaces}
+                activePlace={this.state.activePlace}
               />
             )}
           </div>
