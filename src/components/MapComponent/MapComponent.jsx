@@ -16,6 +16,21 @@ class MapComponent extends React.Component {
 
   baseState = this.state;
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.userLocation.lat !== this.props.userLocation.lat ||
+      nextProps.userLocation.lng !== this.props.userLocation.lng
+    ) {
+      this.setState((prevState) => ({
+        viewport: {
+          ...prevState.viewport,
+          latitude: nextProps.userLocation.lat,
+          longitude: nextProps.userLocation.lng,
+        },
+      }));
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.activePlace !== this.props.activePlace) {
       if (
