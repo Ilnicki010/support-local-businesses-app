@@ -1,10 +1,10 @@
 .siteWrapper {
 }
-.contentWrapper{
-    display: grid;
+.contentWrapper {
+  display: grid;
+  grid-template-columns:  1fr 1fr;
+  gap: 30px;
     padding: 0 5vw;
-    grid-template-columns: 10% 1fr 1fr;
-    gap: 40px;
 }
 .resultsTitle {
   font-weight: 700;
@@ -19,21 +19,14 @@
   justify-content: flex-start;
   align-items: flex-start;
   padding: 50px 10vw;
-  background-color: rgb(250, 255, 196);
+  background-color: rgb(235, 235, 235);
   .inputsWrapper {
     display: flex;
-    input {
-      padding: 15px 20px;
-      margin: 5px;
-      width: 20vw;
-      border-radius: 5px;
-      border: 1px solid lightgray;
-      font-size: 1rem;
-      &:focus {
-        box-shadow: none;
-        outline: none;
-        border: 1px solid #666;
-      }
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    *{
+        margin: 0 5px;
     }
   }
 }
