@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.checkbox,
+.filters-header-row {
+  text-align: left;
+  padding-left: 20px;
+}
