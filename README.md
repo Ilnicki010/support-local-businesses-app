@@ -5,8 +5,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 ## todo
 
 ### core features:
-
-- [ ] The selected specific place should ping different endpoint (high priority)
+- [ ] Would be really cool if, after you submit your email address, that button turns green and from "Support" to "Supported!"
 - [x] Integrate map
 - [ ] Clam your business/Add campaign - link to Airtable form
 - [x] Integrate airtable with support the business form
@@ -18,13 +17,15 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 
 ### bugs
 
+- [ ] Search by keyword, reset after first search
 - [x] Map update
 - [x] Display images
 - [ ] Do not use setState in componentDidUpdate. work-with-map branch need closer look and refactor ( zoom to the point feature)
 
 ### improvements
-
+- [ ] Need to add a captcha for the email submission
 - [ ] Find/scrape campaign info binded with a place and put it to the Airtable as a starting point
+- [ ] Update "Supported" logos on page with results of the ones you have supported already (for return visitors)
 - [ ] Deal with paging of results so user can get more by scrolling down page
 - [ ] Put a button underneath the map. “Redo Search for Visible Map Area”
 - [ ] Styling, styling, styling
