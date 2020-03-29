@@ -9,7 +9,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] The selected specific place should ping different endpoint (high priority)
 - [x] Integrate map
 - [ ] Clam your business/Add campaign - link to Airtable form
-- [ ] Find/scrape campaign info binded with a place and put it to the Airtable as a starting point
+- [x] Integrate airtable with support the business form
 - [x] Filters
 - [x] Zooming in on map changes search
 - [x] Change screen update so that results are added onto the bottom of the array
@@ -24,6 +24,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 
 ### improvements
 
+- [ ] Find/scrape campaign info binded with a place and put it to the Airtable as a starting point
 - [ ] Deal with paging of results so user can get more by scrolling down page
 - [ ] Put a button underneath the map. “Redo Search for Visible Map Area”
 - [ ] Styling, styling, styling

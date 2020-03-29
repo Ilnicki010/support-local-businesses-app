@@ -13,7 +13,7 @@ class MapComponent extends React.Component {
       latitude: this.props.userLocation.lat,
       longitude: this.props.userLocation.lng,
       width: "100%",
-      height: "40vh",
+      height: "50vh",
       zoom: 10,
     },
   };
