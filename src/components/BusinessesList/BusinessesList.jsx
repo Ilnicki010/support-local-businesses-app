@@ -8,9 +8,9 @@ class BusinessesList extends Component {
 
   baseState = this.state;
 
-  handleShowYourSupport = (place) => {
+  handleShowYourSupport = place => {
     this.setState({
-      activePlace: { ...place },
+      activePlace: { ...place }
     });
   };
 
@@ -20,7 +20,7 @@ class BusinessesList extends Component {
     }
   }
 
-  submitSupport = (e) => {
+  submitSupport = e => {
     e.preventDefault();
     console.log(e);
 
@@ -101,7 +101,7 @@ class BusinessesList extends Component {
                 </form>
               </div>
             ) : null}
-          </li>
+          </div>
         ))}
       </div>
     );
