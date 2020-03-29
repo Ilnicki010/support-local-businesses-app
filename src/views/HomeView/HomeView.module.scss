@@ -1,9 +1,10 @@
 .siteWrapper {
 }
-.contentWrapper {
-  display: grid;
-  grid-template-columns: 10% 1fr 1fr;
-  gap: 20px;
+.contentWrapper{
+    display: grid;
+    padding: 0 5vw;
+    grid-template-columns: 10% 1fr 1fr;
+    gap: 40px;
 }
 .resultsTitle {
   font-weight: 700;

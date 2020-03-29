@@ -29,13 +29,13 @@ const Button = ({ href, children, secondary, ...props }) => {
 
 Button.propTypes = {
   href: PropTypes.string,
-  /* iconButton: PropTypes.bool, */
-  children: PropTypes.node
+  secondary: PropTypes.bool,
+  children: PropTypes.node,
 };
 Button.defaultProps = {
   href: null,
-  children: null
-  /* iconButton: false, */
+  children: null,
+  secondary: false,
 };
 
 export default Button;
