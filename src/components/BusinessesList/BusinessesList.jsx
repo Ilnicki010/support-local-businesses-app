@@ -1,16 +1,22 @@
 import React, { Component } from "react";
+import Airtable from "airtable";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
+
 import { SHOW_IMAGES } from "../../constants";
 
+const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
+  "app7LKgKsFtsq1x8D"
+);
+
 class BusinessesList extends Component {
-  state = { activePlace: null };
+  state = { activePlace: null, emailAddress: "", sendEmailStatus: "" };
 
   baseState = this.state;
 
-  handleShowYourSupport = place => {
+  handleShowYourSupport = (place) => {
     this.setState({
-      activePlace: { ...place }
+      activePlace: { ...place },
     });
   };
 
@@ -20,15 +26,39 @@ class BusinessesList extends Component {
     }
   }
 
-  submitSupport = e => {
-    e.preventDefault();
-    console.log(e);
+  createRecordAirtable = (place_id, place_name, email) => {
+    return new Promise((resolve, reject) => {
+      base("addToWaitingList").create(
+        [
+          {
+            fields: {
+              placeName: place_name,
+              placeId: place_id,
+              email,
+            },
+          },
+        ],
+        function (err, records) {
+          if (err) reject(err);
+          if (records.length === 1) resolve(records);
+        }
+      );
+    });
+  };
 
-    // //// CALL Chinonso FUNCTION HERE
+  submitSupport = (e) => {
+    const { activePlace, emailAddress } = this.state;
+    this.setState({ sendEmailStatus: "loading" });
+    e.preventDefault();
+    this.createRecordAirtable(activePlace.id, activePlace.name, emailAddress)
+      .then((data) => {
+        if (data) this.setState({ sendEmailStatus: "sent", activePlace: null });
+      })
+      .catch(() => this.setState({ sendEmailStatus: "error" }));
   };
 
   render() {
-    const getPhoto = photoRef => {
+    const getPhoto = (photoRef) => {
       const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
       return SHOW_IMAGES
         ? { "background-image": `url(${url})`, width: "100%", height: "100%" }
@@ -38,7 +68,7 @@ class BusinessesList extends Component {
     const { listOfPlaces } = this.props;
     return (
       <div className="business-tile">
-        {listOfPlaces.map(placeObject => (
+        {listOfPlaces.map((placeObject) => (
           <div className={styles.listElement} key={placeObject.place.id}>
             <div
               className={styles.image}
@@ -83,7 +113,7 @@ class BusinessesList extends Component {
 
                 <form
                   className={styles.supportForm}
-                  onSubmit={e => this.submitSupport(e)}
+                  onSubmit={this.submitSupport}
                 >
                   <label className={styles.supportFormLabel}>
                     <span className={styles.supportFormLabelText}>
@@ -91,6 +121,11 @@ class BusinessesList extends Component {
                       help this business to survive
                     </span>
                     <input
+                      value={this.state.emailAddress}
+                      onChange={(event) => {
+                        this.setState({ emailAddress: event.target.value });
+                      }}
+                      name="email"
                       className={styles.supportFormInput}
                       placeholder="eg. john.doe@gmail.com"
                       type="email"
@@ -99,6 +134,9 @@ class BusinessesList extends Component {
                   </label>
                   <Button type="submit">Send</Button>
                 </form>
+                {this.state.sendEmailStatus === "loading" && (
+                  <span className={styles.emailIndicator}>Sending...</span>
+                )}
               </div>
             ) : null}
           </div>
