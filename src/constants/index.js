@@ -9,7 +9,7 @@ export const FILTER_LIST = [
   {
     label: "Clothing Stores",
     value: "clothing_store",
-    selected: true,
+    selected: true
   },
   { label: "Beauty Salons", value: "beauty_salon", selected: true },
   { label: "Hair Care", value: "hair_care", selected: true },
@@ -18,13 +18,8 @@ export const FILTER_LIST = [
   {
     label: "Grocery/Supermarket",
     value: "grocery_or_supermarket",
-    selected: true,
-  },
-  {
-    label: "OTHER",
-    value: "other",
-    selected: false,
-  },
+    selected: true
+  }
   /*
   { label: "ac,coun,ting", value: "accounting", selected: false },
   { label: "airport", value: "airport", selected: false },

@@ -25,12 +25,20 @@ class HomeView extends React.Component {
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null,
+    activePlace: null
   };
 
   placeType = {
     label: "",
     value: ""
+  };
+
+  checkForReadyToSearch = () => {
+    const sq = this.state.searchQuery;
+    if ((sq.location.name || sq.location.lat) && this.placeType.value) {
+      // we have some new data, so let's click search for them
+      this.submitSearch(null);
+    }
   };
 
   findPlaces = () => {
@@ -83,17 +91,19 @@ class HomeView extends React.Component {
       filteredPlaces: [],
       loading: false
     });
+    this.checkForReadyToSearch();
   };
 
   submitSearch = event => {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.findPlaces();
-    console.log(event);
+    console.log(event ? event : "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
   getFilteredValues = placeType => {
     this.placeType = { value: placeType.value, label: placeType.label };
+    this.checkForReadyToSearch();
   };
 
   render() {
@@ -132,7 +142,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}
-                getActivePlace={(place) =>
+                getActivePlace={place =>
                   this.setState({ activePlace: { ...place } })
                 }
               />
