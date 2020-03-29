@@ -26,7 +26,7 @@ class BusinessesList extends Component {
     return (
       <ul>
         {listOfPlaces.map((placeObject) => (
-          <li className={styles.listElement}>
+          <li className={styles.listElement} key={placeObject.place.id}>
             <div
               className={styles.image}
               // style={

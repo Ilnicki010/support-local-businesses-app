@@ -29,6 +29,7 @@ class MapComponent extends React.Component {
         >
           {places.map((place) => (
             <Marker
+              key={place.place.id}
               latitude={place.place.geometry.location.lat}
               longitude={place.place.geometry.location.lng}
               offsetLeft={-20}
