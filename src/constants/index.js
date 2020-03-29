@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges
+export const PLACEHOLDER_TEXT = "Enter a keyword or select a category";
 export const FILTER_LIST = [
   { label: "Restaurants", value: "restaurant", selected: true },
   { label: "Bakeries", value: "bakery", selected: true },
