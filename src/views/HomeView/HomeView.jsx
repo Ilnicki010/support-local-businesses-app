@@ -19,8 +19,8 @@ class HomeView extends React.Component {
       location: {
         name: "",
         lat: null,
-        lng: null,
-      },
+        lng: null
+      }
     },
     resultPlaces: [],
     filteredPlaces: [],
@@ -30,36 +30,36 @@ class HomeView extends React.Component {
 
   placeType = {
     label: "",
-    value: "",
+    value: ""
   };
 
   findPlaces = () => {
     this.setState({
       resultPlaces: [],
-      loading: true,
+      loading: true
     });
     const uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
     console.log(uri);
-    axios.get(uri).then((data) => {
-      data.data.results.forEach((place) => {
-        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
-          this.setState((prevState) => ({
+    axios.get(uri).then(data => {
+      data.data.results.forEach(place => {
+        this.checkIsPlaceInDB(place).then(gofundmeURL => {
+          this.setState(prevState => ({
             loading: false,
             resultPlaces: [
               {
                 place,
-                gofundmeURL: gofundmeURL || null,
+                gofundmeURL: gofundmeURL || null
               },
-              ...prevState.resultPlaces,
+              ...prevState.resultPlaces
             ],
-            filteredPlaces: this.state.resultPlaces,
+            filteredPlaces: this.state.resultPlaces
           }));
         });
       });
     });
   };
 
-  checkIsPlaceInDB = (place) => {
+  checkIsPlaceInDB = place => {
     return new Promise((resolve, reject) => {
       base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
         if (err) reject(err);
@@ -76,20 +76,23 @@ class HomeView extends React.Component {
         location: {
           name: address,
           lat: latlng.lat,
-          lng: latlng.lng,
-        },
+          lng: latlng.lng
+        }
       },
+      resultPlaces: [],
+      filteredPlaces: [],
+      loading: false
     });
   };
 
-  submitSearch = (event) => {
+  submitSearch = event => {
     event.preventDefault();
     this.findPlaces();
     console.log(event);
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = (placeType) => {
+  getFilteredValues = placeType => {
     this.placeType = { value: placeType.value, label: placeType.label };
   };
 
@@ -98,7 +101,7 @@ class HomeView extends React.Component {
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
           <form
-            onSubmit={(event) => this.submitSearch(event)}
+            onSubmit={event => this.submitSearch(event)}
             className={styles.inputsWrapper}
           >
             <div style={{ flex: "2" }}>
