@@ -1,6 +1,10 @@
 import React from "react";
-import ReactMapGL, { Marker, Popup } from "react-map-gl";
-
+import ReactMapGL, {
+  Marker,
+  LinearInterpolator,
+  FlyToInterpolator,
+} from "react-map-gl";
+import * as d3 from "d3-ease";
 import styles from "./MapComponent.module.scss";
 
 class MapComponent extends React.Component {
@@ -26,6 +30,7 @@ class MapComponent extends React.Component {
           ...prevState.viewport,
           latitude: nextProps.userLocation.lat,
           longitude: nextProps.userLocation.lng,
+          transitionEasing: d3.easeCubic,
         },
       }));
     }
@@ -57,6 +62,8 @@ class MapComponent extends React.Component {
     return (
       <div>
         <ReactMapGL
+          transitionDuration={1000}
+          transitionInterpolator={new FlyToInterpolator()}
           style={{ position: "relative" }}
           {...viewport}
           mapStyle="mapbox://styles/mapbox/light-v9"
