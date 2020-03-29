@@ -18,6 +18,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 
 ### bugs
 
+- [x] Map update
 - [x] Display images
 - [ ] Do not use setState in componentDidUpdate. work-with-map branch need closer look and refactor ( zoom to the point feature)
 
