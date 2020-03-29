@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges
 export const FILTER_LIST = [
   { display: "Restaurants", value: "restaurant", selected: true },
   { display: "Bakeries", value: "bakery", selected: true },

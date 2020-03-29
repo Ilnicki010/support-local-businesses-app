@@ -1,20 +1,24 @@
 import React from "react";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
+import { SHOW_IMAGES } from "../../constants";
 
 const BusinessesList = ({ listOfPlaces }) => {
-  const style = photoRef => ({
-    backgroundImage: `url(https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=1600&maxwidth=1600&key=${process.env.REACT_APP_GOOGLE_API_KEY})`
-  });
+  const getPhoto = photoRef => {
+    const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
+    return SHOW_IMAGES
+      ? { backgroundImage: `url(${url})`, width: "100%", height: "100%" }
+      : {};
+  };
   return (
-    <ul>
+    <div>
       {listOfPlaces.map((placeObject, i) => (
-        <li className={styles.listElement} key={i}>
+        <div className={styles.listElement} key={i}>
           <div
             className={styles.image}
             style={
               placeObject.place.photos
-                ? style(placeObject.place.photos[0].photo_reference)
+                ? getPhoto(placeObject.place.photos[0].photo_reference)
                 : null
             }
           />
@@ -31,9 +35,9 @@ const BusinessesList = ({ listOfPlaces }) => {
               <Button>Support</Button>
             )}
           </div>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 export default BusinessesList;
