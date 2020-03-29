@@ -6,13 +6,13 @@ import { SHOW_IMAGES } from "../../constants";
 class BusinessesList extends Component {
   state = { activePlace: null };
 
-  handleShowYourSupport = (id) => {
+  handleShowYourSupport = id => {
     this.setState({
-      activePlace: id,
+      activePlace: id
     });
   };
 
-  submitSupport = (e) => {
+  submitSupport = e => {
     e.preventDefault();
     console.log(e);
 
@@ -20,21 +20,25 @@ class BusinessesList extends Component {
   };
 
   render() {
-    const style = (photoRef) => ({
-      backgroundImage: `url(https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=1600&maxwidth=1600&key=${process.env.REACT_APP_GOOGLE_API_KEY})`,
-    });
+    const getPhoto = photoRef => {
+      const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
+      return SHOW_IMAGES
+        ? { "background-image": `url(${url})`, width: "100%", height: "100%" }
+        : {};
+    };
+
     const { listOfPlaces } = this.props;
     return (
-      <ul>
-        {listOfPlaces.map((placeObject) => (
-          <li className={styles.listElement} key={placeObject.place.id}>
+      <div className="business-tile">
+        {listOfPlaces.map(placeObject => (
+          <div className={styles.listElement} key={placeObject.place.id}>
             <div
               className={styles.image}
-              // style={
-              //   placeObject.place.photos
-              //     ? style(placeObject.place.photos[0].photo_reference)
-              //     : null
-              // }
+              style={
+                placeObject.place.photos
+                  ? getPhoto(placeObject.place.photos[0].photo_reference)
+                  : null
+              }
             />
             <div className={styles.listElementContent}>
               <h3>{placeObject.place.name}</h3>
@@ -63,6 +67,7 @@ class BusinessesList extends Component {
                   </span>
                   <button
                     className={styles.closeButton}
+                    type="submit"
                     onClick={() => this.setState({ activePlace: null })}
                   >
                     Cancel
@@ -71,7 +76,7 @@ class BusinessesList extends Component {
 
                 <form
                   className={styles.supportForm}
-                  onSubmit={(e) => this.submitSupport(e)}
+                  onSubmit={e => this.submitSupport(e)}
                 >
                   <label className={styles.supportFormLabel}>
                     <span className={styles.supportFormLabelText}>
@@ -89,9 +94,9 @@ class BusinessesList extends Component {
                 </form>
               </div>
             )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     );
   }
 }
