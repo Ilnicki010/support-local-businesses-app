@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Checkbox from "./Checkbox";
+import Checkbox from "../Checkbox/Checkbox";
 
 class Filters extends Component {
   componentWillMount = () => {

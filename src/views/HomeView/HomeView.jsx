@@ -4,7 +4,7 @@ import Airtable from "airtable";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
-import Filters from "../../components/Filters";
+import Filters from "../../components/Filters/Filters";
 import { FILTER_LIST } from "../../constants";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
@@ -30,7 +30,8 @@ class HomeView extends React.Component {
     this.setState({
       loading: true
     });
-    const uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&type=${this.placeTypes}`;
+    const uri = `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeTypes}`;
+    console.log(uri);
     axios.get(uri).then(data => {
       data.data.results.forEach(place => {
         this.checkIsPlaceInDB(place).then(gofundmeURL => {
@@ -82,9 +83,6 @@ class HomeView extends React.Component {
     return (
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
-          <span
-            className={styles.siteHeaderTitle}
-          >{`Search results for businesses in ${this.state.searchQuery.location.name}`}</span>
           <div className={styles.inputsWrapper}>
             {" "}
             <LocationInput
@@ -95,6 +93,11 @@ class HomeView extends React.Component {
             <input type="text" />
           </div>
         </header>
+        <span className={styles.resultsTitle}>
+          {this.state.searchQuery.location.name
+            ? `Search results for related to: ${this.state.searchQuery.location.name}`
+            : ""}
+        </span>
         <div className={styles.contentWrapper}>
           <div>
             <Filters

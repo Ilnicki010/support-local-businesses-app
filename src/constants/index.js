@@ -20,6 +20,13 @@ export const FILTER_LIST = [
     value: "grocery_or_supermarket",
     selected: true
   },
+  {
+    display: "OTHER",
+    value:
+      "accounting,airport,amusement_park,aquarium,art_gallery,atm,bank,bar,bicycle_store,bus_station,campground,car_dealer,car_rental,car_repair,car_wash,casino,cemetery,city_hall,convenience_store,courthouse,dentist,department_store,doctor,drugstore,electrician,electronics_store,embassy,fire_station,florist,funeral_home,furniture_store,gas_station,gym,hardware_store,hindu_temple,home_goods_store,hospital,insurance_agency,jewelry_store,laundry,lawyer,library,light_rail_station,liquor_store,local_government_office,locksmith,lodging,meal_delivery,meal_takeaway,mosque,movie_rental,movie_theater,moving_company,museum,night_club,painter,park,parking,pet_store,pharmacy,physiotherapist,plumber,police,post_office,primary_school,real_estate_agency,roofing_contractor,rv_park,school,secondary_school,shoe_store,shopping_mall,spa,stadium,storage,store,subway_station,supermarket,taxi_stand,tourist_attraction,train_station,transit_station,travel_agency,university,veterinary_care,zoo",
+    selected: false
+  }
+  /*
   { display: "accounting", value: "accounting", selected: false },
   { display: "airport", value: "airport", selected: false },
   { display: "amusement_park", value: "amusement_park", selected: false },
@@ -166,4 +173,5 @@ export const FILTER_LIST = [
     selected: false
   },
   { display: "zoo", value: "zoo", selected: false }
+  */
 ];
