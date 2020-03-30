@@ -52,9 +52,12 @@ class Filters extends Component {
 
   render() {
     const { selectedOption } = this.state;
+    const displayStyle = this.props.filterBoxVisible
+      ? styles.filter
+      : styles["filter-invisible"];
 
     return (
-      <div>
+      <div className={displayStyle}>
         <Select
           /* noOptionsMessage={() => null} */
           className={styles.filter}

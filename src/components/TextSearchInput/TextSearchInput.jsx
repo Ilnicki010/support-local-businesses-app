@@ -46,9 +46,13 @@ class TextSearchInput extends React.Component {
   }
 
   render() {
+    const displayStyle = this.props.textSearchBoxVisible
+      ? styles.textInput
+      : styles["textInput-invisible"];
     return (
       <div className={styles.textSearchInput}>
         <input
+          className={displayStyle}
           type="text"
           value={this.state.value}
           onChange={this.handleChange}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Airtable from "airtable";
 import styles from "./HomeView.module.scss";
@@ -10,10 +10,13 @@ import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
 import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
+import Switch from "../../components/Switch/Switch";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
 );
+
+let toggleValue = false;
 
 class HomeView extends React.Component {
   state = {
@@ -27,7 +30,9 @@ class HomeView extends React.Component {
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null
+    activePlace: null,
+    filterBoxVisible: true,
+    textSearchBoxVisible: false
   };
 
   placeType = {
@@ -123,6 +128,15 @@ class HomeView extends React.Component {
     this.checkForReadyToSearch();
   };
 
+  handleSwitchToggle = () => {
+    this.toggleValue = !this.toggleValue;
+    const { filterBoxVisible, textSearchBoxVisible } = this.state;
+    this.setState({
+      filterBoxVisible: !filterBoxVisible,
+      textSearchBoxVisible: !textSearchBoxVisible
+    });
+  };
+
   render() {
     return (
       <main className={styles.siteWrapper}>
@@ -147,16 +161,23 @@ class HomeView extends React.Component {
             </div>
             <div style={{ flex: "2" }}>
               <Filters
+                filterBoxVisible={this.state.filterBoxVisible}
                 filterList={FILTER_LIST}
                 filteredValuesHandler={this.getFilteredValues}
               />
             </div>
+            <Switch
+              className={styles.Switch}
+              isOn={this.toggleValue}
+              onColor="#EF476F"
+              handleToggle={this.handleSwitchToggle}
+            />{" "}
             <div style={{ flex: "2" }}>
               <TextSearchInput
+                textSearchBoxVisible={this.state.textSearchBoxVisible}
                 filteredValuesHandler={this.getFilteredValues}
               ></TextSearchInput>
             </div>
-
             <Button style={{ flex: "1" }} type="submit">
               Search
             </Button>
