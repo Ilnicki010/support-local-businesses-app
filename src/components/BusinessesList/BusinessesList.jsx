@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Airtable from "airtable";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
@@ -136,6 +137,18 @@ class BusinessesList extends Component {
                 {this.state.sendEmailStatus === "loading" && (
                   <span className={styles.emailIndicator}>Sending...</span>
                 )}
+                <Link
+                  className={styles.linkToClaim}
+                  to={{
+                    pathname: "claim-business",
+                    state: {
+                      placeId: this.state.activePlace.id,
+                      placeName: this.state.activePlace.name,
+                    },
+                  }}
+                >
+                  Is that your business? Claim it!
+                </Link>
               </div>
             ) : null}
           </div>
