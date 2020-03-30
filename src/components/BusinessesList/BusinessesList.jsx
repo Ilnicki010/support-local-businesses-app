@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Airtable from "airtable";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
@@ -14,9 +15,9 @@ class BusinessesList extends Component {
 
   baseState = this.state;
 
-  handleShowYourSupport = place => {
+  handleShowYourSupport = (place) => {
     this.setState({
-      activePlace: { ...place }
+      activePlace: { ...place },
     });
   };
 
@@ -34,9 +35,9 @@ class BusinessesList extends Component {
             fields: {
               placeName: place_name,
               placeId: place_id,
-              email
-            }
-          }
+              email,
+            },
+          },
         ],
         function (err, records) {
           if (err) reject(err);
@@ -46,19 +47,19 @@ class BusinessesList extends Component {
     });
   };
 
-  submitSupport = e => {
+  submitSupport = (e) => {
     const { activePlace, emailAddress } = this.state;
     this.setState({ sendEmailStatus: "loading" });
     e.preventDefault();
     this.createRecordAirtable(activePlace.id, activePlace.name, emailAddress)
-      .then(data => {
+      .then((data) => {
         if (data) this.setState({ sendEmailStatus: "sent", activePlace: null });
       })
       .catch(() => this.setState({ sendEmailStatus: "error" }));
   };
 
   render() {
-    const getPhoto = photoRef => {
+    const getPhoto = (photoRef) => {
       const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
       return SHOW_IMAGES
         ? { backgroundImage: `url(${url})`, width: "100px", height: "100px" }
@@ -68,7 +69,7 @@ class BusinessesList extends Component {
     const { listOfPlaces } = this.props;
     return (
       <div className="business-tile">
-        {listOfPlaces.map(placeObject => (
+        {listOfPlaces.map((placeObject) => (
           <div className={styles.listElement} key={placeObject.place.id}>
             <div
               className={styles.image}
@@ -123,7 +124,7 @@ class BusinessesList extends Component {
                     </span>
                     <input
                       value={this.state.emailAddress}
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({ emailAddress: event.target.value });
                       }}
                       name="email"
@@ -138,6 +139,17 @@ class BusinessesList extends Component {
                 {this.state.sendEmailStatus === "loading" && (
                   <span className={styles.emailIndicator}>Sending...</span>
                 )}
+                <Link
+                  to={{
+                    pathname: "claim-business",
+                    state: {
+                      placeId: this.state.activePlace.id,
+                      placeName: this.state.activePlace.name,
+                    },
+                  }}
+                >
+                  Is that your business? Claim it!
+                </Link>
               </div>
             ) : null}
           </div>

@@ -6,10 +6,8 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
+import { FILTER_LIST } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
-import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
-import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
@@ -21,75 +19,74 @@ class HomeView extends React.Component {
       location: {
         name: "",
         lat: null,
-        lng: null
-      }
+        lng: null,
+      },
     },
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null
+    activePlace: null,
   };
 
   placeType = {
-    label: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].label : "",
-    value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : ""
+    label: "",
+    value: "",
   };
 
-  keywords = "";
-
-  // auto-submit when we have enough fields. for now disabling because it was calling multiple times for duplicate data
   checkForReadyToSearch = () => {
     const sq = this.state.searchQuery;
     if ((sq.location.name || sq.location.lat) && this.placeType.value) {
       // we have some new data, so let's click search for them
-      // this.submitSearch(null);
+      this.submitSearch(null);
     }
   };
 
   findPlaces = () => {
     this.setState({
       resultPlaces: [],
-      loading: true
+      loading: true,
     });
-    let uri;
-    if (this.keywords) {
-      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
-      uri += `&input=${this.keywords}`;
-      uri = encodeURI(uri);
-    } else {
-      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
-      // ignoring keywords for this search
-      if (this.placeType.value) uri += `&types=${this.placeType.value}`;
-    }
+    const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
     console.log(uri);
-    axios.get(uri).then(data => {
-      if (!data.data.results) alert("No results for this query");
-      data.data.results.forEach(place => {
-        this.checkIsPlaceInDB(place).then(gofundmeURL => {
-          this.setState(prevState => ({
+    axios.get(uri).then((data) => {
+      data.data.results.forEach((place) => {
+        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+          this.setState((prevState) => ({
             loading: false,
             resultPlaces: [
               {
                 place,
-                gofundmeURL: gofundmeURL || null
+                gofundmeURL: gofundmeURL || null,
               },
-              ...prevState.resultPlaces
+              ...prevState.resultPlaces,
             ],
-            filteredPlaces: this.state.resultPlaces
+            filteredPlaces: this.state.resultPlaces,
           }));
         });
       });
     });
   };
 
-  checkIsPlaceInDB = place => {
+  checkIsPlaceInDB = (place) => {
+    const filter = `{google_places_id} = "${place.id}" `;
     return new Promise((resolve, reject) => {
-      base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
-        if (err) reject(err);
-        record.fields.google_places_id === place.id
-          ? resolve(record.fields.gofundme_url)
-          : resolve(null);
-      });
+      base("Table 1")
+        .select({
+          // Selecting the first 3 records in Grid view:
+          maxRecords: 1,
+          view: "Grid view",
+          filterByFormula: filter,
+        })
+        .eachPage(
+          function page(records, fetchNextPage) {
+            records.length > 0
+              ? resolve(records[0].fields.gofundme_url)
+              : resolve(null);
+          },
+          function done(err) {
+            if (err) reject(err);
+          }
+        );
     });
   };
 
@@ -99,27 +96,25 @@ class HomeView extends React.Component {
         location: {
           name: address,
           lat: latlng.lat,
-          lng: latlng.lng
-        }
+          lng: latlng.lng,
+        },
       },
       resultPlaces: [],
       filteredPlaces: [],
-      loading: false
+      loading: false,
     });
     this.checkForReadyToSearch();
   };
 
-  submitSearch = event => {
+  submitSearch = (event) => {
     if (event) event.preventDefault();
     this.findPlaces();
     console.log(event || "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = (placeType, isSelect = false) => {
-    if (isSelect)
-      this.placeType = { value: placeType.value, label: placeType.label };
-    else this.keywords = placeType.text;
+  getFilteredValues = (placeType) => {
+    this.placeType = { value: placeType.value, label: placeType.label };
     this.checkForReadyToSearch();
   };
 
@@ -127,15 +122,8 @@ class HomeView extends React.Component {
     return (
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
-          <div className={styles.TopLogoContainer}>
-            <img
-              src={TopLogo}
-              alt="Save Small Biz"
-              className={styles.TopLogo}
-            />
-          </div>{" "}
           <form
-            onSubmit={event => this.submitSearch(event)}
+            onSubmit={(event) => this.submitSearch(event)}
             className={styles.inputsWrapper}
           >
             <div style={{ flex: "2" }}>
@@ -151,12 +139,6 @@ class HomeView extends React.Component {
                 filteredValuesHandler={this.getFilteredValues}
               />
             </div>
-            <div style={{ flex: "2" }}>
-              <TextSearchInput
-                filteredValuesHandler={this.getFilteredValues}
-              ></TextSearchInput>
-            </div>
-
             <Button style={{ flex: "1" }} type="submit">
               Search
             </Button>
@@ -174,6 +156,7 @@ class HomeView extends React.Component {
                 <span className={styles.specialText}>
                   {this.state.searchQuery.location.name}
                 </span>
+                `
               </h2>
             ) : (
               ""
@@ -181,7 +164,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}
-                getActivePlace={place =>
+                getActivePlace={(place) =>
                   this.setState({ activePlace: { ...place } })
                 }
               />
