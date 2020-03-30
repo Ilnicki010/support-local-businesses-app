@@ -140,6 +140,7 @@ class BusinessesList extends Component {
                   <span className={styles.emailIndicator}>Sending...</span>
                 )}
                 <Link
+                  className={styles.linkToClaim}
                   to={{
                     pathname: "claim-business",
                     state: {
