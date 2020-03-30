@@ -71,7 +71,7 @@ class HomeView extends React.Component {
   };
 
   checkIsPlaceInDB = (place) => {
-    const filter = `{google_places_id} = "${place.id}" `;
+    const filter = `AND({google_places_id} = "${place.id}",{is_verified} = 1)`;
     return new Promise((resolve, reject) => {
       base("Table 1")
         .select({
