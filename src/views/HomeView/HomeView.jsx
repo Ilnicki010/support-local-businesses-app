@@ -51,11 +51,19 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true
     });
-    let uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
-    if (this.placeType.value) uri += `&types=${this.placeType.value}`;
-    if (this.keywords) uri += `&keywords=${this.keywords}`;
+    let uri;
+    if (this.keywords) {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
+      uri += `&input=${this.keywords}`;
+      uri = encodeURI(uri);
+    } else {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
+      // ignoring keywords for this search
+      if (this.placeType.value) uri += `&types=${this.placeType.value}`;
+    }
     console.log(uri);
     axios.get(uri).then(data => {
+      if (!data.data.results) alert("No results for this query");
       data.data.results.forEach(place => {
         this.checkIsPlaceInDB(place).then(gofundmeURL => {
           this.setState(prevState => ({
