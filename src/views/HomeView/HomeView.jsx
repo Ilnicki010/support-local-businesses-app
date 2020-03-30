@@ -32,7 +32,8 @@ class HomeView extends React.Component {
     loading: false,
     activePlace: null,
     filterBoxVisible: true,
-    textSearchBoxVisible: false
+    textSearchBoxVisible: false,
+    keywords: ""
   };
 
   placeType = {
@@ -57,9 +58,9 @@ class HomeView extends React.Component {
       loading: true
     });
     let uri;
-    if (this.keywords) {
+    if (this.state.keywords) {
       uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
-      uri += `&input=${this.keywords}`;
+      uri += `&input=${this.state.keywords}`;
       uri = encodeURI(uri);
     } else {
       uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
@@ -124,7 +125,7 @@ class HomeView extends React.Component {
   getFilteredValues = (placeType, isSelect = false) => {
     if (isSelect)
       this.placeType = { value: placeType.value, label: placeType.label };
-    else this.keywords = placeType.text;
+    else this.setState({ keywords: placeType.text });
     this.checkForReadyToSearch();
   };
 
@@ -132,6 +133,7 @@ class HomeView extends React.Component {
     this.toggleValue = !this.toggleValue;
     const { filterBoxVisible, textSearchBoxVisible } = this.state;
     this.setState({
+      keywords: textSearchBoxVisible ? "" : this.state.keywords,
       filterBoxVisible: !filterBoxVisible,
       textSearchBoxVisible: !textSearchBoxVisible
     });
@@ -176,6 +178,7 @@ class HomeView extends React.Component {
               <TextSearchInput
                 textSearchBoxVisible={this.state.textSearchBoxVisible}
                 filteredValuesHandler={this.getFilteredValues}
+                value={this.state.keywords}
               ></TextSearchInput>
             </div>
             <Button style={{ flex: "1" }} type="submit">
