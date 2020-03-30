@@ -1,6 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-export const PLACEHOLDER_TEXT = "some text";
-export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges
+export const PLACEHOLDER_TEXT = "Limit search to...";
+export const FREETEXT_PLACEHOLDER_TEXT = "Keywords...";
+export const SHOW_IMAGES = true; // Suppress photos during dev to reduce google charges
+export const HOME_TOP_LOGO = "SOSB_900x364.png";
+export const HOME_BOTTOM_LOGO = "SOSB_Logo_Rectangle.jpg";
 export const FILTER_LIST = [
   { label: "Restaurants", value: "restaurant", selected: true },
   { label: "Bakeries", value: "bakery", selected: true },
@@ -10,7 +13,7 @@ export const FILTER_LIST = [
   {
     label: "Clothing Stores",
     value: "clothing_store",
-    selected: true,
+    selected: true
   },
   { label: "Beauty Salons", value: "beauty_salon", selected: true },
   { label: "Hair Care", value: "hair_care", selected: true },
@@ -19,8 +22,8 @@ export const FILTER_LIST = [
   {
     label: "Grocery/Supermarket",
     value: "grocery_or_supermarket",
-    selected: true,
-  },
+    selected: true
+  }
   /*
   { label: "ac,coun,ting", value: "accounting", selected: false },
   { label: "airport", value: "airport", selected: false },

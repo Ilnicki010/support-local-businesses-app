@@ -2,9 +2,9 @@
 }
 .contentWrapper {
   display: grid;
-  grid-template-columns:  1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 30px;
-padding: 5vh 5vw;
+  padding: 5vh 5vw;
 }
 .resultsTitle {
   font-weight: 700;
@@ -25,12 +25,27 @@ padding: 5vh 5vw;
     justify-content: center;
     height: 100%;
     width: 100%;
-    *{
-        margin: 0 5px;
+    margin-left: 80px;
+    * {
+      margin: 0 5px;
     }
   }
 }
-.specialText{
-    color:#3CB371;
-    margin: 0 5px;
+.specialText {
+  color: #3cb371;
+  margin: 0 5px;
+}
+
+.TopLogo {
+  background-position: center;
+  background-size: "cover";
+  background-repeat: "no-repeat";
+  height: 80px;
+}
+
+.TopLogoContainer {
+  position: absolute;
+  left: 10px;
+  top: 30px;
+  height: 80px;
 }

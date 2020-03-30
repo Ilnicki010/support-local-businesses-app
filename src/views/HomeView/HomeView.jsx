@@ -6,9 +6,10 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST } from "../../constants";
+import { FILTER_LIST, HOME_TOP_LOGO } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
+import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
@@ -111,6 +112,13 @@ class HomeView extends React.Component {
     return (
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
+          <div className={styles.TopLogoContainer}>
+            <img
+              src={TopLogo}
+              alt="Save Small Biz"
+              className={styles.TopLogo}
+            />
+          </div>{" "}
           <form
             onSubmit={event => this.submitSearch(event)}
             className={styles.inputsWrapper}
@@ -123,14 +131,15 @@ class HomeView extends React.Component {
               />
             </div>
             <div style={{ flex: "2" }}>
-              <TextSearchInput></TextSearchInput>
-            </div>
-            <div style={{ flex: "2" }}>
               <Filters
                 filterList={FILTER_LIST}
                 filteredValuesHandler={this.getFilteredValues}
               />
             </div>
+            <div style={{ flex: "2" }}>
+              <TextSearchInput></TextSearchInput>
+            </div>
+
             <Button style={{ flex: "1" }} type="submit">
               Search
             </Button>
