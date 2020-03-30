@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Airtable from "airtable";
+import ReactDependentScript from "react-dependent-script";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
@@ -136,77 +137,85 @@ class HomeView extends React.Component {
 
   render() {
     return (
-      <main className={styles.siteWrapper}>
-        <header className={styles.siteHeader}>
-          <div className={styles.TopLogoContainer}>
-            <img
-              width="100px"
-              src={TopLogo}
-              alt="Save Small Biz"
-              className={styles.TopLogo}
-            />
-          </div>
-          <form
-            onSubmit={(event) => this.submitSearch(event)}
-            className={styles.inputsWrapper}
-          >
-            <div style={{ flex: "2" }}>
-              <LocationInput
-                getLocationInfo={(latlng, address) =>
-                  this.getLocation(latlng, address)
-                }
+      <ReactDependentScript
+        scripts={[
+          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&fields=name,geometry.location,place_id,vicinity,photos`,
+        ]}
+      >
+        <main className={styles.siteWrapper}>
+          <header className={styles.siteHeader}>
+            <div className={styles.TopLogoContainer}>
+              <img
+                width="100px"
+                src={TopLogo}
+                alt="Save Small Biz"
+                className={styles.TopLogo}
               />
             </div>
-            <div style={{ flex: "2" }}>
-              <Filters
-                filterList={FILTER_LIST}
-                filteredValuesHandler={this.getFilteredValues}
-              />
-            </div>
-            <div style={{ flex: "2" }}>
-              <TextSearchInput filteredValuesHandler={this.getFilteredValues} />
-            </div>
+            <form
+              onSubmit={(event) => this.submitSearch(event)}
+              className={styles.inputsWrapper}
+            >
+              <div style={{ flex: "2" }}>
+                <LocationInput
+                  getLocationInfo={(latlng, address) =>
+                    this.getLocation(latlng, address)
+                  }
+                />
+              </div>
+              <div style={{ flex: "2" }}>
+                <Filters
+                  filterList={FILTER_LIST}
+                  filteredValuesHandler={this.getFilteredValues}
+                />
+              </div>
+              <div style={{ flex: "2" }}>
+                <TextSearchInput
+                  filteredValuesHandler={this.getFilteredValues}
+                />
+              </div>
 
-            <Button style={{ flex: "1" }} type="submit">
-              Search
-            </Button>
-          </form>
-        </header>
-        <div className={styles.contentWrapper}>
-          <section>
-            {this.state.resultPlaces.length > 0 ? (
-              <h2 className={styles.resultsTitle}>
-                Search results for
-                <span className={styles.specialText}>
-                  {this.placeType.label}
-                </span>
-                near
-                <span className={styles.specialText}>
-                  {this.state.searchQuery.location.name}
-                </span>
-              </h2>
-            ) : null}
-            {this.state.resultPlaces && (
-              <BusinessesList
-                listOfPlaces={this.state.resultPlaces}
-                getActivePlace={(place) =>
-                  this.setState({ activePlace: { ...place } })
-                }
-              />
-            )}
-            {this.state.loading && <span>loading...</span>}
-          </section>
-          <div>
-            {this.state.searchQuery.location.lat && (
-              <MapComponent
-                userLocation={this.state.searchQuery.location}
-                places={this.state.resultPlaces}
-                activePlace={this.state.activePlace}
-              />
-            )}
+              <Button style={{ flex: "1" }} type="submit">
+                Search
+              </Button>
+            </form>
+          </header>
+          <div className={styles.contentWrapper}>
+            <section>
+              {this.state.resultPlaces.length > 0 ? (
+                <h2 className={styles.resultsTitle}>
+                  Search results for
+                  <span className={styles.specialText}>
+                    {this.placeType.label}
+                  </span>
+                  near
+                  <span className={styles.specialText}>
+                    {this.state.searchQuery.location.name}
+                  </span>
+                </h2>
+              ) : null}
+              {this.state.resultPlaces && (
+                <BusinessesList
+                  listOfPlaces={this.state.resultPlaces}
+                  getActivePlace={(place) =>
+                    this.setState({ activePlace: { ...place } })
+                  }
+                />
+              )}
+              {this.state.loading && <span>loading...</span>}
+            </section>
+            <div>
+              {this.state.searchQuery.location.lat && (
+                <MapComponent
+                  userLocation={this.state.searchQuery.location}
+                  places={this.state.resultPlaces}
+                  activePlace={this.state.activePlace}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </ReactDependentScript>
     );
   }
 }
