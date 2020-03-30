@@ -8,6 +8,7 @@ import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
 import { FILTER_LIST } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
+import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
@@ -19,18 +20,18 @@ class HomeView extends React.Component {
       location: {
         name: "",
         lat: null,
-        lng: null,
-      },
+        lng: null
+      }
     },
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null,
+    activePlace: null
   };
 
   placeType = {
     label: "",
-    value: "",
+    value: ""
   };
 
   checkForReadyToSearch = () => {
@@ -44,30 +45,30 @@ class HomeView extends React.Component {
   findPlaces = () => {
     this.setState({
       resultPlaces: [],
-      loading: true,
+      loading: true
     });
     const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
     console.log(uri);
-    axios.get(uri).then((data) => {
-      data.data.results.forEach((place) => {
-        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
-          this.setState((prevState) => ({
+    axios.get(uri).then(data => {
+      data.data.results.forEach(place => {
+        this.checkIsPlaceInDB(place).then(gofundmeURL => {
+          this.setState(prevState => ({
             loading: false,
             resultPlaces: [
               {
                 place,
-                gofundmeURL: gofundmeURL || null,
+                gofundmeURL: gofundmeURL || null
               },
-              ...prevState.resultPlaces,
+              ...prevState.resultPlaces
             ],
-            filteredPlaces: this.state.resultPlaces,
+            filteredPlaces: this.state.resultPlaces
           }));
         });
       });
     });
   };
 
-  checkIsPlaceInDB = (place) => {
+  checkIsPlaceInDB = place => {
     return new Promise((resolve, reject) => {
       base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
         if (err) reject(err);
@@ -84,24 +85,24 @@ class HomeView extends React.Component {
         location: {
           name: address,
           lat: latlng.lat,
-          lng: latlng.lng,
-        },
+          lng: latlng.lng
+        }
       },
       resultPlaces: [],
       filteredPlaces: [],
-      loading: false,
+      loading: false
     });
     this.checkForReadyToSearch();
   };
 
-  submitSearch = (event) => {
+  submitSearch = event => {
     if (event) event.preventDefault();
     this.findPlaces();
     console.log(event || "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = (placeType) => {
+  getFilteredValues = placeType => {
     this.placeType = { value: placeType.value, label: placeType.label };
     this.checkForReadyToSearch();
   };
@@ -111,7 +112,7 @@ class HomeView extends React.Component {
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
           <form
-            onSubmit={(event) => this.submitSearch(event)}
+            onSubmit={event => this.submitSearch(event)}
             className={styles.inputsWrapper}
           >
             <div style={{ flex: "2" }}>
@@ -120,6 +121,9 @@ class HomeView extends React.Component {
                   this.getLocation(latlng, address)
                 }
               />
+            </div>
+            <div style={{ flex: "2" }}>
+              <TextSearchInput></TextSearchInput>
             </div>
             <div style={{ flex: "2" }}>
               <Filters
@@ -152,7 +156,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}
-                getActivePlace={(place) =>
+                getActivePlace={place =>
                   this.setState({ activePlace: { ...place } })
                 }
               />
