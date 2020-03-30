@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./TextSearchInput.module.scss";
+import { FREETEXT_PLACEHOLDER_TEXT } from "../../constants";
 
 class TextSearchInput extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class TextSearchInput extends React.Component {
           type="text"
           value={this.state.value}
           onChange={this.handleChange}
+          placeholder={FREETEXT_PLACEHOLDER_TEXT}
         />
       </div>
     );
