@@ -6,7 +6,7 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST, HOME_TOP_LOGO } from "../../constants";
+import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
 import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
@@ -31,9 +31,11 @@ class HomeView extends React.Component {
   };
 
   placeType = {
-    label: "",
-    value: ""
+    label: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].label : "",
+    value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : ""
   };
+
+  keywords = "";
 
   checkForReadyToSearch = () => {
     const sq = this.state.searchQuery;
@@ -48,7 +50,9 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true
     });
-    const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
+    let uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
+    if (this.placeType.value) uri += `&types=${this.placeType.value}`;
+    if (this.keywords) uri += `&keywords=${this.keywords}`;
     console.log(uri);
     axios.get(uri).then(data => {
       data.data.results.forEach(place => {
@@ -103,8 +107,10 @@ class HomeView extends React.Component {
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = placeType => {
-    this.placeType = { value: placeType.value, label: placeType.label };
+  getFilteredValues = (placeType, isSelect = false) => {
+    if (isSelect)
+      this.placeType = { value: placeType.value, label: placeType.label };
+    else this.keywords = placeType.text;
     this.checkForReadyToSearch();
   };
 
@@ -137,7 +143,9 @@ class HomeView extends React.Component {
               />
             </div>
             <div style={{ flex: "2" }}>
-              <TextSearchInput></TextSearchInput>
+              <TextSearchInput
+                filteredValuesHandler={this.getFilteredValues}
+              ></TextSearchInput>
             </div>
 
             <Button style={{ flex: "1" }} type="submit">

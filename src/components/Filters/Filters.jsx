@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-/* import Select from "react-select"; */
-import Creatable, { makeCreatableSelect } from "react-select/creatable";
+import Select from "react-select";
+// import Creatable, { makeCreatableSelect } from "react-select/creatable";
 import { PLACEHOLDER_TEXT } from "../../constants";
 
 import styles from "./Filters.module.scss";
 
 class Filters extends Component {
   state = {
-    selectedOption: null,
+    selectedOption: this.props.filterList && this.props.filterList[0],
     freeText: ""
   };
 
@@ -55,7 +55,7 @@ class Filters extends Component {
 
     return (
       <div>
-        <Creatable
+        <Select
           /* noOptionsMessage={() => null} */
           className={styles.filter}
           placeholder={PLACEHOLDER_TEXT}
@@ -63,7 +63,7 @@ class Filters extends Component {
           onChange={this.handleChange}
           options={this.props.filterList}
           components={this.components}
-          onKeyDown={this.handleKeyDown}
+          /* onKeyDown={this.handleKeyDown} */
           onInputChange={this.handleInputChange}
           /* onCreateOption={this.handleCreate} */
         />

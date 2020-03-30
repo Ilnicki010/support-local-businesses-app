@@ -13,6 +13,7 @@ class TextSearchInput extends React.Component {
 
   handleChange(event) {
     this.setState({ value: event.target.value });
+    this.props.filteredValuesHandler({ text: event.target.value }, false);
   }
 
   handleSubmit(event) {
