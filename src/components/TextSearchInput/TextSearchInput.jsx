@@ -21,7 +21,7 @@ class TextSearchInput extends React.Component {
 
   render() {
     return (
-      <div className={styles.inputWrapper}>
+      <div className={styles.textSearchInput}>
         <input
           type="text"
           value={this.state.value}
