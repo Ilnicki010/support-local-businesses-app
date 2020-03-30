@@ -100,6 +100,7 @@ class ClaimYourBusiness extends React.Component {
             <div className={styles.formItem}>
               <label htmlFor="email">Email address</label>
               <input
+                required
                 type="email"
                 name="email"
                 placeholder="eg. john.doe@gmail.com"
@@ -111,8 +112,11 @@ class ClaimYourBusiness extends React.Component {
               />
             </div>
             <div className={styles.formItem}>
-              <label htmlFor="gofundme">GoFundMe link</label>
+              <label htmlFor="gofundme">
+                GoFundMe or other fundraising link
+              </label>
               <input
+                required
                 type="text"
                 name="gofundme"
                 id="gofundme"
@@ -126,6 +130,7 @@ class ClaimYourBusiness extends React.Component {
             <div className={styles.formItem}>
               <label htmlFor="phone">Phone number</label>
               <input
+                required
                 type="text"
                 name="phone"
                 placeholder="eg. 789 987 788"
@@ -137,12 +142,12 @@ class ClaimYourBusiness extends React.Component {
               />
             </div>
 
-            <Button type="submit">Verificate</Button>
+            <Button type="submit">Verify</Button>
           </div>
         </form>
         {this.state.status && this.state.status === "sent" ? (
           <div className={styles.statusWrapper}>
-            <span>Sent to the verification</span>
+            <span>Check your email for verification</span>
           </div>
         ) : null}
       </main>
