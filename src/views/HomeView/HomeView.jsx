@@ -6,7 +6,9 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST } from "../../constants";
+import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
+import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
+import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
@@ -29,15 +31,17 @@ class HomeView extends React.Component {
   };
 
   placeType = {
-    label: "",
-    value: "",
+    label: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].label : "",
+    value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : "",
   };
+
+  keywords = "";
 
   checkForReadyToSearch = () => {
     const sq = this.state.searchQuery;
     if ((sq.location.name || sq.location.lat) && this.placeType.value) {
       // we have some new data, so let's click search for them
-      this.submitSearch(null);
+      // this.submitSearch(null);
     }
   };
 
@@ -46,9 +50,19 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true,
     });
-    const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
+    let uri;
+    if (this.keywords) {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
+      uri += `&input=${this.keywords}`;
+      uri = encodeURI(uri);
+    } else {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
+      // ignoring keywords for this search
+      if (this.placeType.value) uri += `&types=${this.placeType.value}`;
+    }
     console.log(uri);
     axios.get(uri).then((data) => {
+      if (!data.data.results) alert("No results for this query");
       data.data.results.forEach((place) => {
         this.checkIsPlaceInDB(place).then((gofundmeURL) => {
           this.setState((prevState) => ({
@@ -68,13 +82,25 @@ class HomeView extends React.Component {
   };
 
   checkIsPlaceInDB = (place) => {
+    const filter = `AND({google_places_id} = "${place.id}",{is_verified} = 1)`;
     return new Promise((resolve, reject) => {
-      base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
-        if (err) reject(err);
-        record.fields.google_places_id === place.id
-          ? resolve(record.fields.gofundme_url)
-          : resolve(null);
-      });
+      base("Table 1")
+        .select({
+          // Selecting the first 3 records in Grid view:
+          maxRecords: 1,
+          view: "Grid view",
+          filterByFormula: filter,
+        })
+        .eachPage(
+          function page(records, fetchNextPage) {
+            records.length > 0
+              ? resolve(records[0].fields.gofundme_url)
+              : resolve(null);
+          },
+          function done(err) {
+            if (err) reject(err);
+          }
+        );
     });
   };
 
@@ -101,8 +127,10 @@ class HomeView extends React.Component {
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = (placeType) => {
-    this.placeType = { value: placeType.value, label: placeType.label };
+  getFilteredValues = (placeType, isSelect = false) => {
+    if (isSelect)
+      this.placeType = { value: placeType.value, label: placeType.label };
+    else this.keywords = placeType.text;
     this.checkForReadyToSearch();
   };
 
@@ -110,6 +138,14 @@ class HomeView extends React.Component {
     return (
       <main className={styles.siteWrapper}>
         <header className={styles.siteHeader}>
+          <div className={styles.TopLogoContainer}>
+            <img
+              width="100px"
+              src={TopLogo}
+              alt="Save Small Biz"
+              className={styles.TopLogo}
+            />
+          </div>
           <form
             onSubmit={(event) => this.submitSearch(event)}
             className={styles.inputsWrapper}
@@ -127,6 +163,10 @@ class HomeView extends React.Component {
                 filteredValuesHandler={this.getFilteredValues}
               />
             </div>
+            <div style={{ flex: "2" }}>
+              <TextSearchInput filteredValuesHandler={this.getFilteredValues} />
+            </div>
+
             <Button style={{ flex: "1" }} type="submit">
               Search
             </Button>
@@ -144,11 +184,8 @@ class HomeView extends React.Component {
                 <span className={styles.specialText}>
                   {this.state.searchQuery.location.name}
                 </span>
-                `
               </h2>
-            ) : (
-              ""
-            )}
+            ) : null}
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}

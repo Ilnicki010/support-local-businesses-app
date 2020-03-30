@@ -1,6 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-export const PLACEHOLDER_TEXT = "some text";
-export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges
+
+export const PLACEHOLDER_TEXT = "Limit search to...";
+export const FREETEXT_PLACEHOLDER_TEXT = "Keywords...";
+export const SHOW_IMAGES = true; // Suppress photos during dev to reduce google charges
+export const HOME_TOP_LOGO = "SOSB_900x364.png";
+export const HOME_BOTTOM_LOGO = "SOSB_Logo_Rectangle.jpg";
+export const AUTO_SELECT_FIRST_FILTER = "SOSB_Logo_Rectangle.jpg";
 export const FILTER_LIST = [
   { label: "Restaurants", value: "restaurant", selected: true },
   { label: "Bakeries", value: "bakery", selected: true },

@@ -1,0 +1,65 @@
+.siteWrapper{
+    display: grid;
+    grid-template-columns:30% 1fr;
+    height: 100vh;
+}
+.mainHeader{
+    background: #eee;
+    padding: 30px 10%;
+    text-align: left;
+    .backLink{
+        display: flex;
+        align-items: center;
+        color:#000
+    }
+}
+.formWrapper{
+    padding: 10vh 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    &Inner{
+        .formItem{
+            text-align: left;
+            margin: 30px 0;
+            &Disabled{
+                @extend .formItem;
+                opacity: .5;
+            }
+            
+        }
+        input{
+            width: 100%;
+            border-radius: 5px;
+              border:1px solid hsl(0,0%,80%);
+              font-size: 1rem;
+              padding:  15px;
+              outline: none;
+              box-shadow: none;
+              &:focus {
+                box-shadow: none;
+                outline: none;
+                border-color:#2684FF ;
+                box-shadow: 0 0 0 1px #2684FF;
+        
+              }}
+    }
+}
+.statusWrapper{
+    background:#3CB371;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color:#fff;
+    animation: slide .3s;
+    font-weight: 700;
+}
+@keyframes slide {
+    from{
+        transform: translateY(40px);
+    }
+    to{
+        transform: translateY(0);
+    }
+}

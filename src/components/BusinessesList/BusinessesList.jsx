@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Airtable from "airtable";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
@@ -60,9 +61,7 @@ class BusinessesList extends Component {
   render() {
     const getPhoto = (photoRef) => {
       const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
-      return SHOW_IMAGES
-        ? { "background-image": `url(${url})`, width: "100%", height: "100%" }
-        : {};
+      return SHOW_IMAGES ? { backgroundImage: `url(${url})` } : {};
     };
 
     const { listOfPlaces } = this.props;
@@ -81,7 +80,8 @@ class BusinessesList extends Component {
             <div className={styles.listElementContent}>
               <h3>{placeObject.place.name}</h3>
               <span className={styles.listElementContentAddress}>
-                {placeObject.place.vicinity}
+                {placeObject.place.vicinity ||
+                  placeObject.place.formatted_address}
               </span>
             </div>
             <div className={styles.buttonWrapper}>
@@ -137,6 +137,18 @@ class BusinessesList extends Component {
                 {this.state.sendEmailStatus === "loading" && (
                   <span className={styles.emailIndicator}>Sending...</span>
                 )}
+                <Link
+                  className={styles.linkToClaim}
+                  to={{
+                    pathname: "claim-business",
+                    state: {
+                      placeId: this.state.activePlace.id,
+                      placeName: this.state.activePlace.name,
+                    },
+                  }}
+                >
+                  Is that your business? Claim it!
+                </Link>
               </div>
             ) : null}
           </div>

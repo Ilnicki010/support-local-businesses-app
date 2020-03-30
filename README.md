@@ -8,7 +8,7 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] Would be really cool if, after you submit your email address, that button turns green and from "Support" to "Supporter"
 - [ ] Map: Hovers on top of businesses and click scrolls you to that business and pops open the Support section
 - [x] Integrate map
-- [ ] Clam your business/Add campaign - link to Airtable form
+- [x] Clam your business/Add campaign - link to Airtable form
 - [x] Integrate airtable with support the business form
 - [x] Filters
 - [x] Zooming in on map changes search

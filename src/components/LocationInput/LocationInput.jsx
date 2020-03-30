@@ -41,8 +41,9 @@ class LocationInput extends React.Component {
           <div className={styles.inputWrapper}>
             <input
               {...getInputProps({
-                placeholder: "Search Places ...",
-                className: "location-search-input"
+                placeholder: "Set location...",
+                className: "location-search-input",
+                autoFocus: true
               })}
             />
             <div className={styles.autocompleteDropdown}>
