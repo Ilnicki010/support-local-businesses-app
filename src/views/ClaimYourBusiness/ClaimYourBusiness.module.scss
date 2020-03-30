@@ -7,6 +7,11 @@
     background: #eee;
     padding: 30px 10%;
     text-align: left;
+    .backLink{
+        display: flex;
+        align-items: center;
+        color:#000
+    }
 }
 .formWrapper{
     padding: 10vh 10vw;

@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+
 export const PLACEHOLDER_TEXT = "Limit search to...";
 export const FREETEXT_PLACEHOLDER_TEXT = "Keywords...";
 export const SHOW_IMAGES = false; // Suppress photos during dev to reduce google charges

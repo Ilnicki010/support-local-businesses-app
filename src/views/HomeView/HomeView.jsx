@@ -6,7 +6,9 @@ import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST } from "../../constants";
+import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
+import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
+import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
@@ -170,9 +172,7 @@ class HomeView extends React.Component {
                   {this.state.searchQuery.location.name}
                 </span>
               </h2>
-            ) : (
-              null
-            )}
+            ) : null}
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}

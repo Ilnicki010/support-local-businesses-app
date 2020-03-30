@@ -1,6 +1,8 @@
 import React from "react";
 
 import Airtable from "airtable";
+import { Link } from "react-router-dom";
+import { ReactComponent as ArrowLeft } from "../../assets/arrow-left.svg";
 
 import styles from "./ClaimYourBusiness.module.scss";
 
@@ -74,6 +76,9 @@ class ClaimYourBusiness extends React.Component {
     return (
       <main className={styles.siteWrapper}>
         <header className={styles.mainHeader}>
+          <Link to="/" className={styles.backLink}>
+            <ArrowLeft /> Back
+          </Link>
           <h1>Claim "{this.state.placeName}"</h1>
           <span>Tell people how to support what you are doing</span>
         </header>
