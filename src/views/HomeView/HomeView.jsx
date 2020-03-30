@@ -21,18 +21,18 @@ class HomeView extends React.Component {
       location: {
         name: "",
         lat: null,
-        lng: null
-      }
+        lng: null,
+      },
     },
     resultPlaces: [],
     filteredPlaces: [],
     loading: false,
-    activePlace: null
+    activePlace: null,
   };
 
   placeType = {
     label: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].label : "",
-    value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : ""
+    value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : "",
   };
 
   keywords = "";
@@ -49,7 +49,7 @@ class HomeView extends React.Component {
   findPlaces = () => {
     this.setState({
       resultPlaces: [],
-      loading: true
+      loading: true,
     });
     let uri;
     if (this.keywords) {
@@ -62,27 +62,27 @@ class HomeView extends React.Component {
       if (this.placeType.value) uri += `&types=${this.placeType.value}`;
     }
     console.log(uri);
-    axios.get(uri).then(data => {
+    axios.get(uri).then((data) => {
       if (!data.data.results) alert("No results for this query");
-      data.data.results.forEach(place => {
-        this.checkIsPlaceInDB(place).then(gofundmeURL => {
-          this.setState(prevState => ({
+      data.data.results.forEach((place) => {
+        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+          this.setState((prevState) => ({
             loading: false,
             resultPlaces: [
               {
                 place,
-                gofundmeURL: gofundmeURL || null
+                gofundmeURL: gofundmeURL || null,
               },
-              ...prevState.resultPlaces
+              ...prevState.resultPlaces,
             ],
-            filteredPlaces: this.state.resultPlaces
+            filteredPlaces: this.state.resultPlaces,
           }));
         });
       });
     });
   };
 
-  checkIsPlaceInDB = place => {
+  checkIsPlaceInDB = (place) => {
     return new Promise((resolve, reject) => {
       base("Table 1").find("recVm6SBLJTcZ5hpN", (err, record) => {
         if (err) reject(err);
@@ -99,17 +99,17 @@ class HomeView extends React.Component {
         location: {
           name: address,
           lat: latlng.lat,
-          lng: latlng.lng
-        }
+          lng: latlng.lng,
+        },
       },
       resultPlaces: [],
       filteredPlaces: [],
-      loading: false
+      loading: false,
     });
     this.checkForReadyToSearch();
   };
 
-  submitSearch = event => {
+  submitSearch = (event) => {
     if (event) event.preventDefault();
     this.findPlaces();
     console.log(event || "auto-submitting");
@@ -129,13 +129,14 @@ class HomeView extends React.Component {
         <header className={styles.siteHeader}>
           <div className={styles.TopLogoContainer}>
             <img
+              width="100px"
               src={TopLogo}
               alt="Save Small Biz"
               className={styles.TopLogo}
             />
           </div>{" "}
           <form
-            onSubmit={event => this.submitSearch(event)}
+            onSubmit={(event) => this.submitSearch(event)}
             className={styles.inputsWrapper}
           >
             <div style={{ flex: "2" }}>
@@ -152,9 +153,7 @@ class HomeView extends React.Component {
               />
             </div>
             <div style={{ flex: "2" }}>
-              <TextSearchInput
-                filteredValuesHandler={this.getFilteredValues}
-              ></TextSearchInput>
+              <TextSearchInput filteredValuesHandler={this.getFilteredValues} />
             </div>
 
             <Button style={{ flex: "1" }} type="submit">
@@ -181,7 +180,7 @@ class HomeView extends React.Component {
             {this.state.resultPlaces && (
               <BusinessesList
                 listOfPlaces={this.state.resultPlaces}
-                getActivePlace={place =>
+                getActivePlace={(place) =>
                   this.setState({ activePlace: { ...place } })
                 }
               />

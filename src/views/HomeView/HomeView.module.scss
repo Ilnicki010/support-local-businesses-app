@@ -15,7 +15,7 @@
 }
 .siteHeader {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 50px 10vw;
@@ -36,16 +36,7 @@
   margin: 0 5px;
 }
 
-.TopLogo {
-  background-position: center;
-  background-size: "cover";
-  background-repeat: "no-repeat";
-  height: 80px;
-}
-
 .TopLogoContainer {
-  position: absolute;
-  left: 10px;
-  top: 30px;
-  height: 80px;
+  align-self: center;
+  flex:1;
 }

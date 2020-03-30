@@ -9,10 +9,14 @@
     border-radius: 5px;
     margin: 20px 0;
     .image{
-        background-size: contain;
+        background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        border-radius: inherit;
+        border-radius: 5px 0 0 5px;
+        grid-row: 1;
+        grid-column: 1;
+        height: 100%;
+        width: 100%;
     }
     .buttonWrapper{
         grid-row: 1;
@@ -27,13 +31,12 @@
     }
     &Content{
         grid-row: 1;
-        grid-column: 1/4;
+        grid-column: 2/4;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
         text-align: left;
-    
         padding: 20px 20px;
         h3{
             margin-top: 0;
