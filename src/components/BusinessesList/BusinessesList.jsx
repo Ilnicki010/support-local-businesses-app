@@ -81,7 +81,8 @@ class BusinessesList extends Component {
             <div className={styles.listElementContent}>
               <h3>{placeObject.place.name}</h3>
               <span className={styles.listElementContentAddress}>
-                {placeObject.place.vicinity}
+                {placeObject.place.vicinity ||
+                  placeObject.place.formatted_address}
               </span>
             </div>
             <div className={styles.buttonWrapper}>

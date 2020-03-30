@@ -37,11 +37,12 @@ class HomeView extends React.Component {
 
   keywords = "";
 
+  // auto-submit when we have enough fields. for now disabling because it was calling multiple times for duplicate data
   checkForReadyToSearch = () => {
     const sq = this.state.searchQuery;
     if ((sq.location.name || sq.location.lat) && this.placeType.value) {
       // we have some new data, so let's click search for them
-      this.submitSearch(null);
+      // this.submitSearch(null);
     }
   };
 
@@ -165,7 +166,6 @@ class HomeView extends React.Component {
                 <span className={styles.specialText}>
                   {this.state.searchQuery.location.name}
                 </span>
-                `
               </h2>
             ) : (
               ""
