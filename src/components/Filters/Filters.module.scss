@@ -1,8 +1,11 @@
 .filter {
   height: 100%;
-  display: inline;
 }
 
-.filter-invisible {
+filterVisible {
+  visibility: visible;
+}
+
+.filterInvisible {
   display: none;
 }

@@ -6,7 +6,7 @@ import { FREETEXT_PLACEHOLDER_TEXT } from "../../constants";
 class TextSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: "" };
+    this.state = { value: props.keywords };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
