@@ -35,11 +35,13 @@ class HomeView extends React.Component {
     value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : "",
   };
 
+  keywords = "";
+
   checkForReadyToSearch = () => {
     const sq = this.state.searchQuery;
     if ((sq.location.name || sq.location.lat) && this.placeType.value) {
       // we have some new data, so let's click search for them
-      this.submitSearch(null);
+      // this.submitSearch(null);
     }
   };
 
@@ -48,7 +50,16 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true,
     });
-    const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
+    let uri;
+    if (this.keywords) {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
+      uri += `&input=${this.keywords}`;
+      uri = encodeURI(uri);
+    } else {
+      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
+      // ignoring keywords for this search
+      if (this.placeType.value) uri += `&types=${this.placeType.value}`;
+    }
     console.log(uri);
     axios.get(uri).then((data) => {
       if (!data.data.results) alert("No results for this query");
@@ -116,8 +127,10 @@ class HomeView extends React.Component {
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
-  getFilteredValues = (placeType) => {
-    this.placeType = { value: placeType.value, label: placeType.label };
+  getFilteredValues = (placeType, isSelect = false) => {
+    if (isSelect)
+      this.placeType = { value: placeType.value, label: placeType.label };
+    else this.keywords = placeType.text;
     this.checkForReadyToSearch();
   };
 
@@ -132,7 +145,7 @@ class HomeView extends React.Component {
               alt="Save Small Biz"
               className={styles.TopLogo}
             />
-          </div>{" "}
+          </div>
           <form
             onSubmit={(event) => this.submitSearch(event)}
             className={styles.inputsWrapper}
