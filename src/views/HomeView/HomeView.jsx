@@ -46,32 +46,25 @@ class HomeView extends React.Component {
       resultPlaces: [],
       loading: true,
     });
-    const uri = `${process.env.REACT_PROXY}/${process.env.REACT_APP_GOOGLE_API__PLACES_ENDPOINT}/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
+    const uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000&types=${this.placeType.value}`;
     console.log(uri);
-    axios
-      .get(uri, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-      .then((data) => {
-        data.data.results.forEach((place) => {
-          this.checkIsPlaceInDB(place).then((gofundmeURL) => {
-            this.setState((prevState) => ({
-              loading: false,
-              resultPlaces: [
-                {
-                  place,
-                  gofundmeURL: gofundmeURL || null,
-                },
-                ...prevState.resultPlaces,
-              ],
-              filteredPlaces: this.state.resultPlaces,
-            }));
-          });
+    axios.get(uri).then((data) => {
+      data.data.results.forEach((place) => {
+        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+          this.setState((prevState) => ({
+            loading: false,
+            resultPlaces: [
+              {
+                place,
+                gofundmeURL: gofundmeURL || null,
+              },
+              ...prevState.resultPlaces,
+            ],
+            filteredPlaces: this.state.resultPlaces,
+          }));
         });
       });
+    });
   };
 
   checkIsPlaceInDB = (place) => {
