@@ -1,6 +1,8 @@
 import React from "react";
-import qs from "qs";
+
 import Airtable from "airtable";
+
+import styles from "./ClaimYourBusiness.module.scss";
 
 import Button from "../../components/Button/Button";
 
@@ -70,45 +72,73 @@ class ClaimYourBusiness extends React.Component {
 
   render() {
     return (
-      <main>
-        <h1>Claim {this.state.placeName}</h1>
-        <span>Tell people how to support what you are doing</span>
-        <form onSubmit={this.sendToAirtable}>
-          <label htmlFor="email">Provide your email address</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={this.state.email}
-            onChange={(e) => {
-              this.setState({ email: e.target.value });
-            }}
-          />
-          <label htmlFor="gofundme">Provide GoFundMe link</label>
-          <input
-            type="text"
-            name="gofundme"
-            id="gofundme"
-            value={this.state.gofundmeURL}
-            onChange={(e) => {
-              this.setState({ gofundmeURL: e.target.value });
-            }}
-          />
-          <label htmlFor="phone">Provide your phone number</label>
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            value={this.state.phoneNumber}
-            onChange={(e) => {
-              this.setState({ phoneNumber: e.target.value });
-            }}
-          />
+      <main className={styles.siteWrapper}>
+        <header className={styles.mainHeader}>
+          <h1>Claim "{this.state.placeName}"</h1>
+          <span>Tell people how to support what you are doing</span>
+        </header>
+        <form onSubmit={this.sendToAirtable} className={styles.formWrapper}>
+          <div className={styles.formWrapperInner}>
+            <div className={styles.formItemDisabled}>
+              <label htmlFor="placename">Place name</label>
+              <input
+                type="text"
+                name="placename"
+                id="placename"
+                value={this.state.placeName}
+                disabled
+                onChange={(e) => {
+                  this.setState({ email: e.target.value });
+                }}
+              />
+            </div>
+            <div className={styles.formItem}>
+              <label htmlFor="email">Email address</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="eg. john.doe@gmail.com"
+                id="email"
+                value={this.state.email}
+                onChange={(e) => {
+                  this.setState({ email: e.target.value });
+                }}
+              />
+            </div>
+            <div className={styles.formItem}>
+              <label htmlFor="gofundme">GoFundMe link</label>
+              <input
+                type="text"
+                name="gofundme"
+                id="gofundme"
+                placeholder="eg. https://gofundme.com/f/mycoolproject"
+                value={this.state.gofundmeURL}
+                onChange={(e) => {
+                  this.setState({ gofundmeURL: e.target.value });
+                }}
+              />
+            </div>
+            <div className={styles.formItem}>
+              <label htmlFor="phone">Phone number</label>
+              <input
+                type="text"
+                name="phone"
+                placeholder="eg. 789 987 788"
+                id="phone"
+                value={this.state.phoneNumber}
+                onChange={(e) => {
+                  this.setState({ phoneNumber: e.target.value });
+                }}
+              />
+            </div>
 
-          <Button type="submit">Send</Button>
+            <Button type="submit">Verificate</Button>
+          </div>
         </form>
         {this.state.status && this.state.status === "sent" ? (
-          <span>Sent!</span>
+          <div className={styles.statusWrapper}>
+            <span>Sent to the verification</span>
+          </div>
         ) : null}
       </main>
     );
