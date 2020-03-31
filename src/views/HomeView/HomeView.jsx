@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import Airtable from "airtable";
-import ReactDependentScript from "react-dependent-script";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
@@ -15,7 +14,7 @@ import MapComponent from "../../components/MapComponent/MapComponent";
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   "app7LKgKsFtsq1x8D"
 );
-
+const { google } = window;
 class HomeView extends React.Component {
   state = {
     searchQuery: {
@@ -46,40 +45,65 @@ class HomeView extends React.Component {
     }
   };
 
+  processSinglePlace = (place) => {
+    this.checkIsPlaceInDB(place).then((gofundmeURL) => {
+      this.setState((prevState) => ({
+        loading: false,
+        resultPlaces: [
+          {
+            place: {
+              ...place,
+              geometry: {
+                location: {
+                  lat: place.geometry.location.lat(),
+                  lng: place.geometry.location.lng(),
+                },
+              },
+            },
+            gofundmeURL: gofundmeURL || null,
+          },
+          ...prevState.resultPlaces,
+        ],
+        filteredPlaces: this.state.resultPlaces,
+      }));
+    });
+  };
+
   findPlaces = () => {
+    const service = new google.maps.places.PlacesService(
+      document.createElement("div")
+    );
     this.setState({
       resultPlaces: [],
       loading: true,
     });
-    let uri;
     if (this.keywords) {
-      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/textsearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&inputtype=textquery`;
-      uri += `&input=${this.keywords}`;
-      uri = encodeURI(uri);
+      service.textSearch(
+        {
+          location: {
+            lat: this.state.searchQuery.location.lat,
+            lng: this.state.searchQuery.location.lng,
+          },
+          radius: "9000",
+          query: this.keywords,
+        },
+        (results, status) =>
+          results.map((place) => this.processSinglePlace(place))
+      );
     } else {
-      uri = `${process.env.REACT_APP_PROXY}/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_GOOGLE_API_KEY}&location=${this.state.searchQuery.location.lat},${this.state.searchQuery.location.lng}&radius=10000`;
-      // ignoring keywords for this search
-      if (this.placeType.value) uri += `&types=${this.placeType.value}`;
+      service.nearbySearch(
+        {
+          location: {
+            lat: this.state.searchQuery.location.lat,
+            lng: this.state.searchQuery.location.lng,
+          },
+          radius: "9000",
+          type: [this.placeType.value],
+        },
+        (results, status) =>
+          results.map((place) => this.processSinglePlace(place))
+      );
     }
-    console.log(uri);
-    axios.get(uri).then((data) => {
-      if (!data.data.results) alert("No results for this query");
-      data.data.results.forEach((place) => {
-        this.checkIsPlaceInDB(place).then((gofundmeURL) => {
-          this.setState((prevState) => ({
-            loading: false,
-            resultPlaces: [
-              {
-                place,
-                gofundmeURL: gofundmeURL || null,
-              },
-              ...prevState.resultPlaces,
-            ],
-            filteredPlaces: this.state.resultPlaces,
-          }));
-        });
-      });
-    });
   };
 
   checkIsPlaceInDB = (place) => {
@@ -137,85 +161,81 @@ class HomeView extends React.Component {
 
   render() {
     return (
-      <ReactDependentScript
-        scripts={[
-          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&fields=name,geometry.location,place_id,vicinity,photos`,
-        ]}
-      >
-        <main className={styles.siteWrapper}>
-          <header className={styles.siteHeader}>
-            <div className={styles.TopLogoContainer}>
-              <img
-                width="100px"
-                src={TopLogo}
-                alt="Save Small Biz"
-                className={styles.TopLogo}
+      <main className={styles.siteWrapper}>
+        <header className={styles.siteHeader}>
+          <div className={styles.TopLogoContainer}>
+            <img
+              width="100px"
+              src={TopLogo}
+              alt="Save Small Biz"
+              className={styles.TopLogo}
+            />
+          </div>
+          <form
+            onSubmit={(event) => this.submitSearch(event)}
+            className={styles.inputsWrapper}
+          >
+            <div style={{ flex: "2" }}>
+              <LocationInput
+                getLocationInfo={(latlng, address) =>
+                  this.getLocation(latlng, address)
+                }
               />
             </div>
-            <form
-              onSubmit={(event) => this.submitSearch(event)}
-              className={styles.inputsWrapper}
-            >
-              <div style={{ flex: "2" }}>
-                <LocationInput
-                  getLocationInfo={(latlng, address) =>
-                    this.getLocation(latlng, address)
-                  }
-                />
-              </div>
-              <div style={{ flex: "2" }}>
-                <Filters
-                  filterList={FILTER_LIST}
-                  filteredValuesHandler={this.getFilteredValues}
-                />
-              </div>
-              <div style={{ flex: "2" }}>
-                <TextSearchInput
-                  filteredValuesHandler={this.getFilteredValues}
-                />
-              </div>
+            <div style={{ flex: "2" }}>
+              <Filters
+                filterList={FILTER_LIST}
+                filteredValuesHandler={this.getFilteredValues}
+              />
+            </div>
+            <div style={{ flex: "2" }}>
+              <TextSearchInput filteredValuesHandler={this.getFilteredValues} />
+            </div>
 
-              <Button style={{ flex: "1" }} type="submit">
-                Search
-              </Button>
-            </form>
-          </header>
-          <div className={styles.contentWrapper}>
-            <section>
-              {this.state.resultPlaces.length > 0 ? (
-                <h2 className={styles.resultsTitle}>
-                  Search results for
+            <Button style={{ flex: "1" }} type="submit">
+              Search
+            </Button>
+          </form>
+        </header>
+        <div className={styles.contentWrapper}>
+          <section>
+            {this.state.resultPlaces.length > 0 ? (
+              <h2 className={styles.resultsTitle}>
+                Search results for
+                {this.keywords ? (
+                  <span className={styles.specialText}>{this.keywords}</span>
+                ) : (
                   <span className={styles.specialText}>
                     {this.placeType.label}
                   </span>
-                  near
-                  <span className={styles.specialText}>
-                    {this.state.searchQuery.location.name}
-                  </span>
-                </h2>
-              ) : null}
-              {this.state.resultPlaces && (
-                <BusinessesList
-                  listOfPlaces={this.state.resultPlaces}
-                  getActivePlace={(place) =>
-                    this.setState({ activePlace: { ...place } })
-                  }
-                />
-              )}
-              {this.state.loading && <span>loading...</span>}
-            </section>
-            <div>
-              {this.state.searchQuery.location.lat && (
-                <MapComponent
-                  userLocation={this.state.searchQuery.location}
-                  places={this.state.resultPlaces}
-                  activePlace={this.state.activePlace}
-                />
-              )}
-            </div>
+                )}
+                near
+                <span className={styles.specialText}>
+                  {this.state.searchQuery.location.name}
+                </span>
+              </h2>
+            ) : null}
+            {this.state.resultPlaces && (
+              <BusinessesList
+                listOfPlaces={this.state.resultPlaces}
+                getActivePlace={(place) =>
+                  this.setState({ activePlace: { ...place } })
+                }
+              />
+            )}
+            {this.state.loading && <span>loading...</span>}
+          </section>
+          <div>
+            {this.state.searchQuery.location.lat && (
+              <MapComponent
+                userLocation={this.state.searchQuery.location}
+                places={this.state.resultPlaces}
+                activePlace={this.state.activePlace}
+              />
+            )}
           </div>
-        </main>
-      </ReactDependentScript>
+        </div>
+      </main>
     );
   }
 }
