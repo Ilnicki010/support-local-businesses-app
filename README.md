@@ -1,6 +1,12 @@
+# SaveSmall.org
+Struggling to survive, small businesses are turning to crowdfunding. S.O.S. pulls together local campaigns into a single view so neighbors can easily support the businesses they love.
+
+[Live Demo](https://savesmall.org)
+
 ## intro
 
-Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go broke during quarantines and all will struggle to get business back afterwards. This not only affects the owners, but the employees of those businesses and ultimately the patrons. Our over-arching goal is to help small businesses weather the storm in the short term and be positioned to recover and thrive in the long term by (a) helping the businesses know who their most supportive patrons are, and (b) providing a method for consumers to see their local businesses in need and link out to funding/support mechanisms (e.g. TipJar, GoFundMe, etc.)
+Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go broke during quarantines and all will struggle to get business back afterwards. This not only affects the owners, but the employees of those businesses and ultimately the patrons. Our over-arching goal is to help small businesses weather the storm in the short term and be positioned to recover and thrive in the long term by (a) helping the businesses know who their most supportive patrons are, and (b) providing a method for consumers to see their local businesses in need and link out to funding/support mechanisms (e.g. TipJar, GoFundMe, etc.).
+You can read more about the project [here](https://devpost.com/software/support-local-businesses)
 
 ## todo
 
@@ -20,7 +26,6 @@ Small businesses (restaurants, bars, cleaners, etc.) are suffering. Many will go
 - [ ] Search by keyword, reset after first search
 - [x] Map update
 - [x] Display images
-- [ ] Do not use setState in componentDidUpdate. work-with-map branch need closer look and refactor ( zoom to the point feature)
 
 ### improvements
 - [ ] Map: auto-scale the map to match the actual results of the search so the used area is as big as possible
