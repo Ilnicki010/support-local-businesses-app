@@ -59,9 +59,8 @@ class BusinessesList extends Component {
   };
 
   render() {
-    const getPhoto = (photoRef) => {
-      const url = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&sensor=false&maxheight=100&maxwidth=100&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
-      return SHOW_IMAGES ? { backgroundImage: `url(${url})` } : {};
+    const getPhoto = (photo) => {
+      return SHOW_IMAGES ? { backgroundImage: `url(${photo()})` } : {};
     };
 
     const { listOfPlaces } = this.props;
@@ -73,7 +72,7 @@ class BusinessesList extends Component {
               className={styles.image}
               style={
                 placeObject.place.photos
-                  ? getPhoto(placeObject.place.photos[0].photo_reference)
+                  ? getPhoto(placeObject.place.photos[0].getUrl)
                   : null
               }
             />
