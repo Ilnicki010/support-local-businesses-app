@@ -9,7 +9,7 @@ import styles from "./ClaimYourBusiness.module.scss";
 import Button from "../../components/Button/Button";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
-  "app7LKgKsFtsq1x8D"
+  process.env.REACT_APP_AIRTABLE_BASE
 );
 
 class ClaimYourBusiness extends React.Component {
@@ -33,7 +33,7 @@ class ClaimYourBusiness extends React.Component {
     isVerified
   ) => {
     return new Promise((resolve, reject) => {
-      base("Table 1").create(
+      base(process.env.REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE).create(
         [
           {
             fields: {

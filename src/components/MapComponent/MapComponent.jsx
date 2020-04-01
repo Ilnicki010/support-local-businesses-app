@@ -1,9 +1,5 @@
 import React from "react";
-import ReactMapGL, {
-  Marker,
-  LinearInterpolator,
-  FlyToInterpolator,
-} from "react-map-gl";
+import ReactMapGL, { Marker, FlyToInterpolator } from "react-map-gl";
 import * as d3 from "d3-ease";
 import styles from "./MapComponent.module.scss";
 
@@ -20,7 +16,7 @@ class MapComponent extends React.Component {
 
   baseState = this.state;
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.userLocation.lat !== this.props.userLocation.lat ||
       nextProps.userLocation.lng !== this.props.userLocation.lng
