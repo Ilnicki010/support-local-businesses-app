@@ -56,6 +56,27 @@ You can read more about the project [here](https://devpost.com/software/support-
 - turf-point
 - ...a lot of React 
 
+
+## development
+
+ 1.  Start with cloning the git repo ` git clone https://github.com/Ilnicki010/support-local-businesses-app.git &&support-local-businesses-app`
+  2. You need to install all dependencies using ` npm install --save `
+  3. Create ` .env ` file as follows
+```
+REACT_APP_AIRTABLE_KEY= airtable api key
+REACT_APP_AIRTABLE_BASE= id of your airtable base
+REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE= table name for businesses(*1)
+REACT_APP_AIRTABLE_WAITING_LIST_TABLE= table name for emails(*2)
+REACT_APP_GOOGLE_API_KEY= google api key
+REACT_APP_MAPBOX_KEY= mapbox api key
+```
+(*1) The table must have columns named exactly like that: “google_places_id”, “gofundme_url”, “place_name”, “is_verified”, “phone_number” and “email”.
+(*2) The table must have columns named exactly like that: "placeName", "placeId ", "email".
+
+  5. Run development server using ` npm run start`
+  
+
+
 ## npm scripts
 
 - `npm run start` run app in development mode (default port: 3000)

@@ -29,7 +29,7 @@ class BusinessesList extends Component {
 
   createRecordAirtable = (place_id, place_name, email) => {
     return new Promise((resolve, reject) => {
-      base("addToWaitingList").create(
+      base(process.env.REACT_APP_AIRTABLE_WAITING_LIST_TABLE).create(
         [
           {
             fields: {

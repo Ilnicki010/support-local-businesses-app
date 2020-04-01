@@ -12,9 +12,8 @@ import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
-  "app7LKgKsFtsq1x8D"
+  process.env.REACT_APP_AIRTABLE_BASE
 );
-const { google } = window;
 class HomeView extends React.Component {
   state = {
     searchQuery: {
@@ -70,7 +69,7 @@ class HomeView extends React.Component {
   };
 
   findPlaces = () => {
-    const service = new google.maps.places.PlacesService(
+    const service = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
     this.setState({
@@ -109,7 +108,7 @@ class HomeView extends React.Component {
   checkIsPlaceInDB = (place) => {
     const filter = `AND({google_places_id} = "${place.id}",{is_verified} = 1)`;
     return new Promise((resolve, reject) => {
-      base("Table 1")
+      base(process.env.REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE)
         .select({
           // Selecting the first 3 records in Grid view:
           maxRecords: 1,
