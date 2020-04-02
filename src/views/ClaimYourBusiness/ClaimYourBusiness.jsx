@@ -9,6 +9,7 @@ import styles from "./ClaimYourBusiness.module.scss";
 import Button from "../../components/Button/Button";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
+  process.env.REACT_APP_AIRTABLE_BASE
 );
 
 class ClaimYourBusiness extends React.Component {
