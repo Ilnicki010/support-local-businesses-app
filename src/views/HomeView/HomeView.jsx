@@ -147,7 +147,6 @@ class HomeView extends React.Component {
   submitSearch = (event) => {
     if (event) event.preventDefault();
     this.findPlaces();
-    console.log(event || "auto-submitting");
   };
 
   // callback function called on filterClicks (sends a CSV of selected values)
