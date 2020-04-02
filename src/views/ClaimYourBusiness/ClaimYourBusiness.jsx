@@ -9,14 +9,13 @@ import styles from "./ClaimYourBusiness.module.scss";
 import Button from "../../components/Button/Button";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
-  process.env.REACT_APP_AIRTABLE_BASE
 );
 
 class ClaimYourBusiness extends React.Component {
   state = {
     email: "",
-    phoneNumber: null,
-    gofundmeURL: null,
+    phoneNumber: "",
+    gofundmeURL: "",
     placeId: this.props.location.state.placeId,
     placeName: this.props.location.state.placeName,
     status: null,
