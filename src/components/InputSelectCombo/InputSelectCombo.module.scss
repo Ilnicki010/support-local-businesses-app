@@ -1,0 +1,7 @@
+/* remove the dropdown arrow */
+
+.input-containerdiv-withtext {
+  [list]::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+}
