@@ -4,12 +4,11 @@ import ReactDependentScript from "react-dependent-script";
 import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
-import Filters from "../../components/Filters/Filters";
 import Button from "../../components/Button/Button";
 import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
-import TextSearchInput from "../../components/TextSearchInput/TextSearchInput";
 import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
+import InputSelectCombo from "../../components/InputSelectCombo/InputSelectCombo";
 
 const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   process.env.REACT_APP_AIRTABLE_BASE
@@ -30,8 +29,10 @@ class HomeView extends React.Component {
   };
 
   placeType = {
+    /*
     label: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].label : "",
     value: AUTO_SELECT_FIRST_FILTER ? FILTER_LIST[0].value : "",
+    */
   };
 
   keywords = "";
@@ -40,7 +41,7 @@ class HomeView extends React.Component {
     const sq = this.state.searchQuery;
     if ((sq.location.name || sq.location.lat) && this.placeType.value) {
       // we have some new data, so let's click search for them
-      // this.submitSearch(null);
+      this.submitSearch(null);
     }
   };
 
@@ -157,6 +158,15 @@ class HomeView extends React.Component {
     this.checkForReadyToSearch();
   };
 
+  onOptionSelect = (value) => {
+    this.getFilteredValues({ value }, true);
+  };
+
+  // called when the user types something not in the quick select list and then tabs, returns or clicks/blurs out of the field
+  onFreeTextEntry = (value) => {
+    this.getFilteredValues({ text: value }, false);
+  };
+
   render() {
     return (
       <ReactDependentScript
@@ -178,25 +188,19 @@ class HomeView extends React.Component {
               onSubmit={(event) => this.submitSearch(event)}
               className={styles.inputsWrapper}
             >
-              <div style={{ flex: "2" }}>
+              <div className={styles.formFlex2}>
                 <LocationInput
                   getLocationInfo={(latlng, address) =>
                     this.getLocation(latlng, address)
                   }
                 />
               </div>
-              <div style={{ flex: "2" }}>
-                <Filters
-                  filterList={FILTER_LIST}
-                  filteredValuesHandler={this.getFilteredValues}
-                />
-              </div>
-              <div style={{ flex: "2" }}>
-                <TextSearchInput
-                  filteredValuesHandler={this.getFilteredValues}
-                />
-              </div>
-
+              <InputSelectCombo
+                placeholder={"Select search type or enter keywords..."}
+                options={FILTER_LIST}
+                onOptionSelect={this.onOptionSelect}
+                onFreeTextEntry={this.onFreeTextEntry}
+              />
               <Button style={{ flex: "1" }} type="submit">
                 Search
               </Button>
