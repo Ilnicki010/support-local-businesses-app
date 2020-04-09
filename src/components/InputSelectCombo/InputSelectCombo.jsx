@@ -22,7 +22,6 @@ const InputSelectCombo = (props) => {
 
   // Called when an item is picked from the dropdown, but also called on every keystroke of data entry
   const change = (event, handler = () => {}) => {
-    console.log(`onChange: type: ${event.type} value:${event.target.value}`);
     const sv = getOptionValueForLabel(event.target.value);
     if (sv) {
       setFreeText("");
@@ -33,11 +32,9 @@ const InputSelectCombo = (props) => {
   };
 
   const blurred = (event) => {
-    console.log("blurred");
     const isSelectItem = getOptionValueForLabel(event.target.value);
     if (!isSelectItem && onFreeTextEntry) {
       if (lastFreeTextCalledBack !== freeText) {
-        console.log(`Calling onFreeText`);
         lastFreeTextCalledBack = freeText;
         onFreeTextEntry(freeText);
       }
@@ -47,12 +44,10 @@ const InputSelectCombo = (props) => {
   const watchForSpecialKeys = (e) => {
     switch (e.key) {
       case "Enter":
-        console.log("ENTER -calling blurred");
         blurred(e);
         e.preventDefault();
         break;
       case "Tab":
-        console.log("TAB");
         break;
       case "Backspace":
         break;
