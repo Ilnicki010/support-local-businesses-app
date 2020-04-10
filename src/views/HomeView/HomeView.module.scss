@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
-  padding: 5vh 5vw;
+  padding: 20px;
 }
 
 .resultsTitle {
@@ -19,6 +19,12 @@
 
 .siteHeader {
   background-color: rgb(235, 235, 235);
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerItemsContainer {
   display: grid;
   grid-template-columns: 0.35fr repeat(2, 1fr) 0.25fr;
   grid-template-rows: 1fr;
@@ -27,6 +33,7 @@
   height: 100px;
   justify-content: center;
   align-items: center;
+  max-width: 1500px;
 }
 
 .specialText {
