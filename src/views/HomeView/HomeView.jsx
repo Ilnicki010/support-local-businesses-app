@@ -178,35 +178,38 @@ class HomeView extends React.Component {
           <header className={styles.siteHeader}>
             <div className={styles.TopLogoContainer}>
               <img
-                width="100px"
                 src={TopLogo}
                 alt="Save Small Biz"
                 className={styles.TopLogo}
               />
             </div>
-            <form
-              onSubmit={(event) => this.submitSearch(event)}
-              className={styles.inputsWrapper}
-            >
-              <div className={styles.formFlex2}>
-                <LocationInput
-                  getLocationInfo={(latlng, address) =>
-                    this.getLocation(latlng, address)
-                  }
-                />
-              </div>
+            <div className={styles.locationBox}>
+              <LocationInput
+                getLocationInfo={(latlng, address) =>
+                  this.getLocation(latlng, address)
+                }
+              />
+            </div>
+            <div className={styles.filterContainer}>
               <InputSelectCombo
+                className={styles.searchFilterInput}
                 placeholder={"Select search type or enter keywords..."}
                 options={FILTER_LIST}
                 onOptionSelect={this.onOptionSelect}
                 onFreeTextEntry={this.onFreeTextEntry}
               />
-              <Button style={{ flex: "1" }} type="submit">
+            </div>
+            <div className={styles.buttonContainer}>
+              <Button
+                className={styles.submitButton}
+                type="submit"
+                onClick={(event) => this.submitSearch(event)}
+              >
                 Search
               </Button>
-            </form>
+            </div>
           </header>
-          <div className={styles.contentWrapper}>
+          <div className={styles.resultsTableWrapper}>
             <section>
               {this.state.resultPlaces.length > 0 ? (
                 <h2 className={styles.resultsTitle}>

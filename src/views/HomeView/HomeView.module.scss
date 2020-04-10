@@ -1,44 +1,75 @@
 .siteWrapper {
+  visibility: initial;
 }
-.contentWrapper {
+
+.resultsTableWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
   padding: 5vh 5vw;
 }
+
 .resultsTitle {
   font-weight: 400;
   font-size: 1.7em;
-  margin: 20px 20px 0;
+  margin-top: 0px;
   text-align: left;
   /* text-decoration: underline; */
 }
+
 .siteHeader {
-  display: flex;
-  align-items: flex-start;
-  padding: 50px 10vw;
   background-color: rgb(235, 235, 235);
-  .inputsWrapper {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    margin-left: 80px;
-    * {
-      margin: 0 5px;
-    }
-  }
+  display: grid;
+  grid-template-columns: 0.35fr repeat(2, 1fr) 0.25fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 25px;
+  grid-row-gap: 0px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
 }
+
 .specialText {
   color: #3cb371;
   margin: 0 5px;
 }
 
-.TopLogoContainer {
-  align-self: center;
-  flex: 1;
+img.TopLogo {
+  height: auto;
+  width: auto;
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
+  margin-left: 50%;
+  margin-right: 50%;
 }
 
-.formFlex2 {
-  flex: "2";
+.TopLogoContainer {
+  background-image: url(`/static/media/SOSB_Logo_1600x648.d98ecaf3.png`)
+    no-repeat;
+  width: 100px;
+  align-self: center;
+  grid-area: 1 / 1 / 2 / 3;
+  background-size: contain;
+}
+
+.locationBox {
+  grid-area: 1 / 2 / 2 / 3;
+  max-height: 100px;
+  height: 35px;
+}
+
+.filterContainer {
+  grid-area: 1 / 3 / 2 / 4;
+  div {
+    height: 35px;
+  }
+}
+
+.buttonContainer {
+  grid-area: 1 / 4 / 2 / 5;
+  button {
+    height: 35px;
+    width: 75px;
+  }
 }
