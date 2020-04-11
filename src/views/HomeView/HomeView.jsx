@@ -5,7 +5,11 @@ import styles from "./HomeView.module.scss";
 import LocationInput from "../../components/LocationInput/LocationInput";
 import BusinessesList from "../../components/BusinessesList/BusinessesList";
 import Button from "../../components/Button/Button";
-import { FILTER_LIST, AUTO_SELECT_FIRST_FILTER } from "../../constants";
+import {
+  FILTER_LIST,
+  SEARCH_ERROR_MESSAGE,
+  AUTO_SELECT_FIRST_FILTER,
+} from "../../constants";
 import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import InputSelectCombo from "../../components/InputSelectCombo/InputSelectCombo";
@@ -37,12 +41,23 @@ class HomeView extends React.Component {
 
   keywords = "";
 
-  checkForReadyToSearch = () => {
+  checkForReadyToSearch = (event = null, isAutoSubmit = false) => {
     const sq = this.state.searchQuery;
-    if ((sq.location.name || sq.location.lat) && this.placeType.value) {
-      // we have some new data, so let's click search for them
-      this.submitSearch(null);
-    }
+    let missing = [];
+    if (!(sq.location.lat && sq.location.lng)) missing.push("Location");
+    if (!(this.keywords || this.placeType.value))
+      missing.push("Business type filter/keywords");
+    if (!isAutoSubmit || (isAutoSubmit && !missing.length))
+      if (!missing.length) {
+        // we have some new data, so let's click search for them
+        this.submitSearch(event);
+      } else {
+        alert(
+          `${SEARCH_ERROR_MESSAGE};\nMissing: ${
+            missing.length > 1 ? missing.join(" and ") : missing
+          }`
+        );
+      }
   };
 
   processSinglePlace = (place) => {
@@ -142,7 +157,7 @@ class HomeView extends React.Component {
       filteredPlaces: [],
       loading: false,
     });
-    this.checkForReadyToSearch();
+    this.checkForReadyToSearch(null, true);
   };
 
   submitSearch = (event) => {
@@ -155,7 +170,7 @@ class HomeView extends React.Component {
     if (isSelect)
       this.placeType = { value: placeType.value, label: placeType.label };
     else this.keywords = placeType.text;
-    this.checkForReadyToSearch();
+    this.checkForReadyToSearch(null, true);
   };
 
   onOptionSelect = (value) => {
@@ -176,37 +191,41 @@ class HomeView extends React.Component {
       >
         <main className={styles.siteWrapper}>
           <header className={styles.siteHeader}>
-            <div className={styles.TopLogoContainer}>
-              <img
-                src={TopLogo}
-                alt="Save Small Biz"
-                className={styles.TopLogo}
-              />
-            </div>
-            <div className={styles.locationBox}>
-              <LocationInput
-                getLocationInfo={(latlng, address) =>
-                  this.getLocation(latlng, address)
-                }
-              />
-            </div>
-            <div className={styles.filterContainer}>
-              <InputSelectCombo
-                className={styles.searchFilterInput}
-                placeholder={"Select search type or enter keywords..."}
-                options={FILTER_LIST}
-                onOptionSelect={this.onOptionSelect}
-                onFreeTextEntry={this.onFreeTextEntry}
-              />
-            </div>
-            <div className={styles.buttonContainer}>
-              <Button
-                className={styles.submitButton}
-                type="submit"
-                onClick={(event) => this.submitSearch(event)}
-              >
-                Search
-              </Button>
+            <div className={styles.headerItemsContainer}>
+              <div className={styles.TopLogoContainer}>
+                <img
+                  src={TopLogo}
+                  alt="Save Small Biz"
+                  className={styles.TopLogo}
+                />
+              </div>
+              <div className={styles.locationBox}>
+                <LocationInput
+                  getLocationInfo={(latlng, address) =>
+                    this.getLocation(latlng, address)
+                  }
+                />
+              </div>
+              <div className={styles.filterContainer}>
+                <InputSelectCombo
+                  className={styles.searchFilterInput}
+                  placeholder={"Select search type or enter keywords..."}
+                  options={FILTER_LIST}
+                  onOptionSelect={this.onOptionSelect}
+                  onFreeTextEntry={this.onFreeTextEntry}
+                />
+              </div>
+              {/** 
+              <div className={styles.buttonContainer}>
+                <Button
+                  className={styles.submitButton}
+                  type="submit"
+                  onClick={(event) => this.checkForReadyToSearch(event, false)}
+                >
+                  Search
+                </Button>
+              </div>
+                */}
             </div>
           </header>
           <div className={styles.resultsTableWrapper}>

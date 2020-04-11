@@ -15,8 +15,7 @@ const InputSelectCombo = (props) => {
   let lastFreeTextCalledBack = "";
 
   const getOptionValueForLabel = (label) => {
-    const lcLabel = label.toLowerCase();
-    const match = options.filter((opt) => lcLabel === opt.label);
+    const match = options.filter((opt) => label === opt.label);
     if (match.length) return match[0].value;
   };
 

@@ -6,6 +6,8 @@ export const SHOW_IMAGES = true; // Suppress photos during dev to reduce google 
 export const HOME_TOP_LOGO = "SOSB_900x364.png";
 export const HOME_BOTTOM_LOGO = "SOSB_Logo_Rectangle.jpg";
 export const AUTO_SELECT_FIRST_FILTER = "SOSB_Logo_Rectangle.jpg";
+export const SEARCH_ERROR_MESSAGE =
+  "Please enter a location and filter before searching";
 export const FILTER_LIST = [
   { label: "Restaurants", value: "restaurant", selected: true },
   { label: "Bakeries", value: "bakery", selected: true },
