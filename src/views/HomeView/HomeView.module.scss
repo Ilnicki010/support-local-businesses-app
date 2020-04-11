@@ -91,6 +91,9 @@ img.TopLogo {
     flex-direction: column;
     align-items: center;
     height: auto;
+    *{
+      margin:5px 0;
+    }
     .TopLogoContainer {
       width: auto;
       grid-area: 1;
