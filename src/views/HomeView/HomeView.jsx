@@ -43,7 +43,7 @@ class HomeView extends React.Component {
 
   checkForReadyToSearch = (event = null, isAutoSubmit = false) => {
     const sq = this.state.searchQuery;
-    let missing = [];
+    const missing = [];
     if (!(sq.location.lat && sq.location.lng)) missing.push("Location");
     if (!(this.keywords || this.placeType.value))
       missing.push("Business type filter/keywords");
@@ -209,7 +209,7 @@ class HomeView extends React.Component {
               <div className={styles.filterContainer}>
                 <InputSelectCombo
                   className={styles.searchFilterInput}
-                  placeholder={"Select search type or enter keywords..."}
+                  placeholder="Select search type or enter keywords..."
                   options={FILTER_LIST}
                   onOptionSelect={this.onOptionSelect}
                   onFreeTextEntry={this.onFreeTextEntry}
@@ -256,7 +256,7 @@ class HomeView extends React.Component {
               )}
               {this.state.loading && <span>loading...</span>}
             </section>
-            <div>
+            <div className={styles.mapWrapper}>
               {this.state.searchQuery.location.lat && (
                 <MapComponent
                   userLocation={this.state.searchQuery.location}

@@ -80,3 +80,30 @@ img.TopLogo {
     width: 75px;
   }
 }
+@media screen and (max-width: 720px) {
+  .siteHeader {
+    height: auto;
+    padding: 20px;
+  }
+  .headerItemsContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    .TopLogoContainer {
+      width: auto;
+      grid-area: 1;
+      img {
+        margin: 0;
+      }
+    }
+  }
+  .resultsTableWrapper {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    .mapWrapper {
+      flex: 1;
+    }
+  }
+}
