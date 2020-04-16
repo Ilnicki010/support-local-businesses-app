@@ -1,7 +1,11 @@
 /* remove the dropdown arrow */
 
 .input-containerdiv-withtext {
+  height: 100%;
   [list]::-webkit-calendar-picker-indicator {
     display: none;
   }
+}
+.input-containerdiv {
+  height: 100%;
 }
