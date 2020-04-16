@@ -191,45 +191,30 @@ class HomeView extends React.Component {
       >
         <main className={styles.siteWrapper}>
           <header className={styles.siteHeader}>
-            <div className={styles.headerItemsContainer}>
-              <div className={styles.TopLogoContainer}>
-                <img
-                  src={TopLogo}
-                  alt="Save Small Biz"
-                  className={styles.TopLogo}
-                />
-              </div>
-              <div className={styles.locationBox}>
-                <LocationInput
-                  getLocationInfo={(latlng, address) =>
-                    this.getLocation(latlng, address)
-                  }
-                />
-              </div>
-              <div className={styles.filterContainer}>
-                <InputSelectCombo
-                  className={styles.searchFilterInput}
-                  placeholder="Select search type or enter keywords..."
-                  options={FILTER_LIST}
-                  onOptionSelect={this.onOptionSelect}
-                  onFreeTextEntry={this.onFreeTextEntry}
-                />
-              </div>
-              {/** 
-              <div className={styles.buttonContainer}>
-                <Button
-                  className={styles.submitButton}
-                  type="submit"
-                  onClick={(event) => this.checkForReadyToSearch(event, false)}
-                >
-                  Search
-                </Button>
-              </div>
-                */}
+            <img
+              src={TopLogo}
+              alt="Save Small Biz"
+              className={styles.headerLogo}
+            />
+            <div className={styles.locationBox}>
+              <LocationInput
+                getLocationInfo={(latlng, address) =>
+                  this.getLocation(latlng, address)
+                }
+              />
+            </div>
+            <div className={styles.filterContainer}>
+              <InputSelectCombo
+                className={styles.searchFilterInput}
+                placeholder="Select search type or enter keywords..."
+                options={FILTER_LIST}
+                onOptionSelect={this.onOptionSelect}
+                onFreeTextEntry={this.onFreeTextEntry}
+              />
             </div>
           </header>
           <div className={styles.resultsTableWrapper}>
-            <section>
+            <section className={styles.resultsTable}>
               {this.state.resultPlaces.length > 0 ? (
                 <h2 className={styles.resultsTitle}>
                   Search results for
