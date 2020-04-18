@@ -143,6 +143,8 @@ class BusinessesList extends Component {
                     state: {
                       placeId: this.state.activePlace.id,
                       placeName: this.state.activePlace.name,
+                      phoneNumber: this.state.activePlace
+                        .international_phone_number,
                     },
                   }}
                 >
