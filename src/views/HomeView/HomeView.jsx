@@ -99,11 +99,32 @@ class HomeView extends React.Component {
             lat: this.state.searchQuery.location.lat,
             lng: this.state.searchQuery.location.lng,
           },
+          fields: ["geometry", "name", "place_id", "photos", "types"],
           radius: "9000",
           query: this.keywords,
         },
-        (results, status) =>
-          results.map((place) => this.processSinglePlace(place))
+        (results, status) => {
+          if (status === "OK") {
+            results.map((place) => {
+              service.getDetails(
+                {
+                  placeId: place.place_id,
+                  fields: ["international_phone_number"],
+                },
+                (data, status) => {
+                  if (status === "OK") {
+                    this.processSinglePlace({
+                      ...place,
+                      international_phone_number: data.international_phone_number
+                        ? data.international_phone_number
+                        : null,
+                    });
+                  }
+                }
+              );
+            });
+          }
+        }
       );
     } else {
       service.nearbySearch(
@@ -112,11 +133,32 @@ class HomeView extends React.Component {
             lat: this.state.searchQuery.location.lat,
             lng: this.state.searchQuery.location.lng,
           },
+          fields: ["geometry", "name", "place_id", "photos", "types"],
           radius: "9000",
           type: [this.placeType.value],
         },
-        (results, status) =>
-          results.map((place) => this.processSinglePlace(place))
+        (results, status) => {
+          if (status === "OK") {
+            results.map((place) => {
+              service.getDetails(
+                {
+                  placeId: place.place_id,
+                  fields: ["international_phone_number"],
+                },
+                (data, status) => {
+                  if (status === "OK") {
+                    this.processSinglePlace({
+                      ...place,
+                      international_phone_number: data.international_phone_number
+                        ? data.international_phone_number
+                        : null,
+                    });
+                  }
+                }
+              );
+            });
+          }
+        }
       );
     }
   };
@@ -186,7 +228,7 @@ class HomeView extends React.Component {
     return (
       <ReactDependentScript
         scripts={[
-          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
+          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&fields=formatted_phone_number`,
         ]}
       >
         <main className={styles.siteWrapper}>
