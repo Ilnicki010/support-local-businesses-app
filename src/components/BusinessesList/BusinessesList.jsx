@@ -51,7 +51,11 @@ class BusinessesList extends Component {
     const { activePlace, emailAddress } = this.state;
     this.setState({ sendEmailStatus: "loading" });
     e.preventDefault();
-    this.createRecordAirtable(activePlace.id, activePlace.name, emailAddress)
+    this.createRecordAirtable(
+      activePlace.place_id,
+      activePlace.name,
+      emailAddress
+    )
       .then((data) => {
         if (data) this.setState({ sendEmailStatus: "sent", activePlace: null });
       })
