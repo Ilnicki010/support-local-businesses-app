@@ -142,13 +142,7 @@ class BusinessesList extends Component {
                 )}
                 <Link
                   className={styles.linkToClaim}
-                  to={{
-                    pathname: "claim-business",
-                    state: {
-                      placeId: this.state.activePlace.place_id,
-                      placeName: this.state.activePlace.name,
-                    },
-                  }}
+                  to={`claim-business/${this.state.activePlace.place_id}`}
                 >
                   Is that your business? Claim it!
                 </Link>

@@ -9,7 +9,11 @@ const App = () => (
   <div className="App">
     <Router>
       <Switch>
-        <Route path="/claim-business" exact component={ClaimYourBusiness} />
+        <Route
+          path="/claim-business/:placeId"
+          exact
+          component={ClaimYourBusiness}
+        />
         <Route path="/" exact component={HomeView} />
       </Switch>
     </Router>
