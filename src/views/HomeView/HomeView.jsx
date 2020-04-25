@@ -105,23 +105,8 @@ class HomeView extends React.Component {
         },
         (results, status) => {
           if (status === "OK") {
-            results.map((place) => {
-              service.getDetails(
-                {
-                  placeId: place.place_id,
-                  fields: ["international_phone_number"],
-                },
-                (data, status) => {
-                  if (status === "OK") {
-                    this.processSinglePlace({
-                      ...place,
-                      international_phone_number: data.international_phone_number
-                        ? data.international_phone_number
-                        : null,
-                    });
-                  }
-                }
-              );
+            results.forEach((place) => {
+              this.processSinglePlace(place);
             });
           }
         }
@@ -139,23 +124,8 @@ class HomeView extends React.Component {
         },
         (results, status) => {
           if (status === "OK") {
-            results.map((place) => {
-              service.getDetails(
-                {
-                  placeId: place.place_id,
-                  fields: ["international_phone_number"],
-                },
-                (data, status) => {
-                  if (status === "OK") {
-                    this.processSinglePlace({
-                      ...place,
-                      international_phone_number: data.international_phone_number
-                        ? data.international_phone_number
-                        : null,
-                    });
-                  }
-                }
-              );
+            results.forEach((place) => {
+              this.processSinglePlace(place);
             });
           }
         }
@@ -164,7 +134,7 @@ class HomeView extends React.Component {
   };
 
   checkIsPlaceInDB = (place) => {
-    const filter = `AND({google_places_id} = "${place.id}",{is_verified} = 1)`;
+    const filter = `AND({google_places_id} = "${place.place_id}",{is_verified} = 1)`;
     return new Promise((resolve, reject) => {
       base(process.env.REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE)
         .select({
@@ -228,7 +198,7 @@ class HomeView extends React.Component {
     return (
       <ReactDependentScript
         scripts={[
-          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&fields=formatted_phone_number`,
+          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
         ]}
       >
         <main className={styles.siteWrapper}>

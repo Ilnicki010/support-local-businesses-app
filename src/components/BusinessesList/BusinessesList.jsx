@@ -39,7 +39,7 @@ class BusinessesList extends Component {
             },
           },
         ],
-        function (err, records) {
+        (err, records) => {
           if (err) reject(err);
           if (records.length === 1) resolve(records);
         }
@@ -51,7 +51,11 @@ class BusinessesList extends Component {
     const { activePlace, emailAddress } = this.state;
     this.setState({ sendEmailStatus: "loading" });
     e.preventDefault();
-    this.createRecordAirtable(activePlace.id, activePlace.name, emailAddress)
+    this.createRecordAirtable(
+      activePlace.place_id,
+      activePlace.name,
+      emailAddress
+    )
       .then((data) => {
         if (data) this.setState({ sendEmailStatus: "sent", activePlace: null });
       })
@@ -67,7 +71,7 @@ class BusinessesList extends Component {
     return (
       <div className="business-tile">
         {listOfPlaces.map((placeObject) => (
-          <div className={styles.listElement} key={placeObject.place.id}>
+          <div className={styles.listElement} key={placeObject.place.place_id}>
             <div
               className={styles.image}
               style={
@@ -141,10 +145,8 @@ class BusinessesList extends Component {
                   to={{
                     pathname: "claim-business",
                     state: {
-                      placeId: this.state.activePlace.id,
+                      placeId: this.state.activePlace.place_id,
                       placeName: this.state.activePlace.name,
-                      phoneNumber: this.state.activePlace
-                        .international_phone_number,
                     },
                   }}
                 >
