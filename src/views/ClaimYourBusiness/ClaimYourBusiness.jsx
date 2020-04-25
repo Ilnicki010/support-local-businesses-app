@@ -27,8 +27,6 @@ class ClaimYourBusiness extends React.Component {
     const service = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-    console.log(this.state.placeId);
-
     service.getDetails(
       {
         placeId: this.state.placeId,
@@ -39,8 +37,6 @@ class ClaimYourBusiness extends React.Component {
           this.setState({
             phoneNumber: data.international_phone_number,
           });
-        } else {
-          console.log(status);
         }
       }
     );
@@ -68,7 +64,7 @@ class ClaimYourBusiness extends React.Component {
             },
           },
         ],
-        function (err, records) {
+        (err, records) => {
           if (err) reject(err);
           if (records.length === 1) resolve(records);
         }
@@ -95,6 +91,7 @@ class ClaimYourBusiness extends React.Component {
   };
 
   render() {
+    const { placeName, phoneNumber, email, gofundmeURL, status } = this.state;
     return (
       <ReactDependentScript
         scripts={[
@@ -106,14 +103,13 @@ class ClaimYourBusiness extends React.Component {
             <Link to="/" className={styles.backLink}>
               <ArrowLeft /> Back
             </Link>
-            <h1>Claim "{this.state.placeName}"</h1>
+            <h1>Claim "{placeName}"</h1>
             <span>Tell people how to support what you are doing</span>
             <h2>How it works?</h2>
             <p>
               We use the phone number provided in your Google Place console to
-              verify if you are the owner of the {this.state.placeName}. You
-              will recive the text with a verification code that must be
-              provided here.
+              verify if you are the owner of the {placeName}. You will recive
+              the text with a verification code that must be provided here.
             </p>
           </header>
           <section>
@@ -125,7 +121,7 @@ class ClaimYourBusiness extends React.Component {
                     type="text"
                     name="placename"
                     id="placename"
-                    value={this.state.placeName}
+                    value={placeName}
                     disabled
                   />
                 </div>
@@ -135,7 +131,7 @@ class ClaimYourBusiness extends React.Component {
                     type="text"
                     name="phonenumber"
                     id="phonenumber"
-                    value={this.state.phoneNumber}
+                    value={phoneNumber}
                     disabled
                   />
                 </div>
@@ -147,7 +143,7 @@ class ClaimYourBusiness extends React.Component {
                     name="email"
                     placeholder="eg. john.doe@gmail.com"
                     id="email"
-                    value={this.state.email}
+                    value={email}
                     onChange={(e) => {
                       this.setState({ email: e.target.value });
                     }}
@@ -163,7 +159,7 @@ class ClaimYourBusiness extends React.Component {
                     name="gofundme"
                     id="gofundme"
                     placeholder="eg. https://gofundme.com/f/mycoolproject"
-                    value={this.state.gofundmeURL}
+                    value={gofundmeURL}
                     onChange={(e) => {
                       this.setState({ gofundmeURL: e.target.value });
                     }}
@@ -174,7 +170,7 @@ class ClaimYourBusiness extends React.Component {
               </div>
             </form>
           </section>
-          {this.state.status && this.state.status === "sent" ? (
+          {status && status === "sent" ? (
             <div className={styles.statusWrapper}>
               <span>Check your email for verification</span>
             </div>
