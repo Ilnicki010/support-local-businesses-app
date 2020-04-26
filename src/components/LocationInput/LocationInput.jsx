@@ -1,54 +1,66 @@
-import React from "react";
-
+import React, { useState } from "react";
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng
+  getLatLng,
 } from "react-places-autocomplete";
+import { GPS_BUTTON } from "../../constants";
+import Button from "../Button/Button";
 import styles from "./LocationInput.module.scss";
 
-class LocationInput extends React.Component {
-  state = { address: "" };
+function LocationInput({ getLocationInfo }) {
+  const [address, setAddress] = useState("");
 
-  handleChange = address => {
-    this.setState({ address });
+  const getUserLocation = () => {
+    setAddress(GPS_BUTTON);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position, err) => {
+        getLocationInfo(
+          { lat: position.coords.latitude, lng: position.coords.longitude },
+          GPS_BUTTON
+        );
+      });
+    } else {
+      // error
+    }
   };
 
-  handleSelect = address => {
-    this.setState({ address });
+  const handleSelect = (addressFromInput) => {
+    setAddress(addressFromInput);
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => this.props.getLocationInfo(latLng, address))
-      .catch(error => console.error("Error", error));
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => getLocationInfo(latLng, addressFromInput))
+      .catch((error) => console.error("Error", error));
   };
 
-  render() {
-    return (
+  return (
+    <div className={styles.wrapper}>
       <PlacesAutocomplete
-        value={this.state.address}
+        value={address}
         searchOptions={{
-          types: ["geocode"]
+          types: ["geocode"],
         }} /* restricts to places rather than business names */
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        onChange={(value) => setAddress(value)}
+        onSelect={handleSelect}
       >
         {({
           getInputProps,
           suggestions,
           getSuggestionItemProps,
           loading,
-          label
+          label,
         }) => (
           <div className={styles.inputWrapper}>
             <input
               {...getInputProps({
                 placeholder: "Set location...",
                 className: "location-search-input",
-                autoFocus: true
+                autoFocus: true,
               })}
             />
+
             <div className={styles.autocompleteDropdown}>
               {loading && <div>Load(suggestion)</div>}
-              {suggestions.map(suggestion => {
+              {suggestions.map((suggestion) => {
                 const className = suggestion.active
                   ? styles.suggestionItemActive
                   : styles.suggestionItem;
@@ -56,7 +68,7 @@ class LocationInput extends React.Component {
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
-                      className
+                      className,
                     })}
                   >
                     <span>{suggestion.description}</span>
@@ -67,7 +79,10 @@ class LocationInput extends React.Component {
           </div>
         )}
       </PlacesAutocomplete>
-    );
-  }
+      <Button secondary onClick={() => getUserLocation()}>
+        {GPS_BUTTON}
+      </Button>
+    </div>
+  );
 }
 export default LocationInput;

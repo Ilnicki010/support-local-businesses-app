@@ -1,3 +1,8 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
 .autocompleteDropdown {
   border-radius: 4px;
   z-index: 99999;
@@ -18,6 +23,8 @@
   }
 }
 .inputWrapper {
+  flex: 1;
   position: relative;
   height: 100%;
+  margin-right: 5px;
 }
