@@ -3,7 +3,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
-
+import { GPS_BUTTON } from "../../constants";
 import Button from "../Button/Button";
 import styles from "./LocationInput.module.scss";
 
@@ -11,12 +11,12 @@ function LocationInput({ getLocationInfo }) {
   const [address, setAddress] = useState("");
 
   const getUserLocation = () => {
-    setAddress("Near you");
+    setAddress(GPS_BUTTON);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position, err) => {
         getLocationInfo(
           { lat: position.coords.latitude, lng: position.coords.longitude },
-          address
+          GPS_BUTTON
         );
       });
     } else {
@@ -80,7 +80,7 @@ function LocationInput({ getLocationInfo }) {
         )}
       </PlacesAutocomplete>
       <Button secondary onClick={() => getUserLocation()}>
-        Near me
+        {GPS_BUTTON}
       </Button>
     </div>
   );
