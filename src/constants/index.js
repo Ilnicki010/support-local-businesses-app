@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 export const PLACEHOLDER_TEXT = "Limit search to...";
+export const GPS_BUTTON = "Near me";
 export const FREETEXT_PLACEHOLDER_TEXT = "Keywords...";
 export const SHOW_IMAGES = true; // Suppress photos during dev to reduce google charges
 export const HOME_TOP_LOGO = "SOSB_900x364.png";
