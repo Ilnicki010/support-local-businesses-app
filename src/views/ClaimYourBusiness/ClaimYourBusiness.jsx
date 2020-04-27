@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDependentScript from "react-dependent-script";
-
 import Airtable from "airtable";
 import { Link } from "react-router-dom";
+import { CaptchaConsumer } from "../../contexts/CaptchaContext";
 import { ReactComponent as ArrowLeft } from "../../assets/arrow-left.svg";
 
 import styles from "./ClaimYourBusiness.module.scss";
@@ -93,90 +93,101 @@ class ClaimYourBusiness extends React.Component {
   render() {
     const { placeName, phoneNumber, email, gofundmeURL, status } = this.state;
     return (
-      <ReactDependentScript
-        scripts={[
-          `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
-        ]}
-      >
-        <main className={styles.siteWrapper}>
-          <header className={styles.mainHeader}>
-            <Link to="/" className={styles.backLink}>
-              <ArrowLeft /> Back
-            </Link>
-            <h1>Claim "{placeName}"</h1>
-            <span>Tell people how to support what you are doing</span>
-            <h2>How it works?</h2>
-            <p>
-              We use the phone number provided in your Google Place console to
-              verify if you are the owner of the {placeName}. You will recive
-              the text with a verification code that must be provided here.
-            </p>
-          </header>
-          <section>
-            <form onSubmit={this.sendToAirtable} className={styles.formWrapper}>
-              <div className={styles.formWrapperInner}>
-                <div className={styles.formItemDisabled}>
-                  <label htmlFor="placename">Place name</label>
-                  <input
-                    type="text"
-                    name="placename"
-                    id="placename"
-                    value={placeName}
-                    disabled
-                  />
-                </div>
-                <div className={styles.formItemDisabled}>
-                  <label htmlFor="phonenumber">Phone number</label>
-                  <input
-                    type="text"
-                    name="phonenumber"
-                    id="phonenumber"
-                    value={phoneNumber}
-                    disabled
-                  />
-                </div>
-                <div className={styles.formItem}>
-                  <label htmlFor="email">Email address</label>
-                  <input
-                    required
-                    type="email"
-                    name="email"
-                    placeholder="eg. john.doe@gmail.com"
-                    id="email"
-                    value={email}
-                    onChange={(e) => {
-                      this.setState({ email: e.target.value });
-                    }}
-                  />
-                </div>
-                <div className={styles.formItem}>
-                  <label htmlFor="gofundme">
-                    GoFundMe or other fundraising link
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    name="gofundme"
-                    id="gofundme"
-                    placeholder="eg. https://gofundme.com/f/mycoolproject"
-                    value={gofundmeURL}
-                    onChange={(e) => {
-                      this.setState({ gofundmeURL: e.target.value });
-                    }}
-                  />
-                </div>
+      <CaptchaConsumer>
+        {(context) => (
+          <ReactDependentScript
+            scripts={[
+              `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
+            ]}
+          >
+            <main className={styles.siteWrapper}>
+              <header className={styles.mainHeader}>
+                <Link to="/" className={styles.backLink}>
+                  <ArrowLeft /> Back
+                </Link>
+                <h1>Claim "{placeName}"</h1>
+                <span>Tell people how to support what you are doing</span>
+                <h2>How it works?</h2>
+                <p>
+                  We use the phone number provided in your Google Place console
+                  to verify if you are the owner of the {placeName}. You will
+                  recive the text with a verification code that must be provided
+                  here.
+                </p>
+              </header>
+              <section>
+                <form
+                  onSubmit={(e) => {
+                    this.sendToAirtable(e);
+                    context.captcha.current.execute();
+                  }}
+                  className={styles.formWrapper}
+                >
+                  <div className={styles.formWrapperInner}>
+                    <div className={styles.formItemDisabled}>
+                      <label htmlFor="placename">Place name</label>
+                      <input
+                        type="text"
+                        name="placename"
+                        id="placename"
+                        value={placeName}
+                        disabled
+                      />
+                    </div>
+                    <div className={styles.formItemDisabled}>
+                      <label htmlFor="phonenumber">Phone number</label>
+                      <input
+                        type="text"
+                        name="phonenumber"
+                        id="phonenumber"
+                        value={phoneNumber}
+                        disabled
+                      />
+                    </div>
+                    <div className={styles.formItem}>
+                      <label htmlFor="email">Email address</label>
+                      <input
+                        required
+                        type="email"
+                        name="email"
+                        placeholder="eg. john.doe@gmail.com"
+                        id="email"
+                        value={email}
+                        onChange={(e) => {
+                          this.setState({ email: e.target.value });
+                        }}
+                      />
+                    </div>
+                    <div className={styles.formItem}>
+                      <label htmlFor="gofundme">
+                        GoFundMe or other fundraising link
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        name="gofundme"
+                        id="gofundme"
+                        placeholder="eg. https://gofundme.com/f/mycoolproject"
+                        value={gofundmeURL}
+                        onChange={(e) => {
+                          this.setState({ gofundmeURL: e.target.value });
+                        }}
+                      />
+                    </div>
 
-                <Button type="submit">Verify</Button>
-              </div>
-            </form>
-          </section>
-          {status && status === "sent" ? (
-            <div className={styles.statusWrapper}>
-              <span>Check your email for verification</span>
-            </div>
-          ) : null}
-        </main>
-      </ReactDependentScript>
+                    <Button type="submit">Verify</Button>
+                  </div>
+                </form>
+              </section>
+              {status && status === "sent" ? (
+                <div className={styles.statusWrapper}>
+                  <span>Check your email for verification</span>
+                </div>
+              ) : null}
+            </main>
+          </ReactDependentScript>
+        )}
+      </CaptchaConsumer>
     );
   }
 }
