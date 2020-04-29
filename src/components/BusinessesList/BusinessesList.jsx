@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Airtable from "airtable";
+import { CaptchaConsumer } from "../../contexts/CaptchaContext";
 import styles from "./BusinessesList.module.scss";
 import Button from "../Button/Button";
 
@@ -15,17 +16,17 @@ class BusinessesList extends Component {
 
   baseState = this.state;
 
-  handleShowYourSupport = (place) => {
-    this.setState({
-      activePlace: { ...place },
-    });
-  };
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.activePlace !== this.state.activePlace) {
       this.props.getActivePlace(this.state.activePlace);
     }
   }
+
+  handleShowYourSupport = (place) => {
+    this.setState({
+      activePlace: { ...place },
+    });
+  };
 
   createRecordAirtable = (place_id, place_name, email) => {
     return new Promise((resolve, reject) => {
@@ -48,16 +49,21 @@ class BusinessesList extends Component {
   };
 
   submitSupport = (e) => {
+    e.preventDefault();
     const { activePlace, emailAddress } = this.state;
     this.setState({ sendEmailStatus: "loading" });
-    e.preventDefault();
     this.createRecordAirtable(
       activePlace.place_id,
       activePlace.name,
       emailAddress
     )
       .then((data) => {
-        if (data) this.setState({ sendEmailStatus: "sent", activePlace: null });
+        if (data)
+          this.setState({
+            sendEmailStatus: "sent",
+            activePlace: null,
+            emailAddress: "",
+          });
       })
       .catch(() => this.setState({ sendEmailStatus: "error" }));
   };
@@ -69,94 +75,104 @@ class BusinessesList extends Component {
 
     const { listOfPlaces } = this.props;
     return (
-      <div className="business-tile">
-        {listOfPlaces.map((placeObject) => (
-          <div className={styles.listElement} key={placeObject.place.place_id}>
-            <div
-              className={styles.image}
-              style={
-                placeObject.place.photos
-                  ? getPhoto(placeObject.place.photos[0].getUrl)
-                  : null
-              }
-            />
-            <div className={styles.listElementContent}>
-              <h3>{placeObject.place.name}</h3>
-              <span className={styles.listElementContentAddress}>
-                {placeObject.place.vicinity ||
-                  placeObject.place.formatted_address}
-              </span>
-            </div>
-            <div className={styles.buttonWrapper}>
-              {placeObject.gofundmeURL ? (
-                <Button href={placeObject.gofundmeURL}>Donate</Button>
-              ) : (
-                <Button
-                  onClick={() => this.handleShowYourSupport(placeObject.place)}
-                >
-                  Support
-                </Button>
-              )}
-            </div>
-            {this.state.activePlace &&
-            this.state.activePlace.id === placeObject.place.id ? (
-              <div className={styles.formWrapper}>
-                <div className={styles.headerCard}>
-                  <span className={styles.headerCardTitle}>
-                    Tell them you are with them
+      <CaptchaConsumer>
+        {(context) => (
+          <div className="business-tile">
+            {listOfPlaces.map((placeObject) => (
+              <div
+                className={styles.listElement}
+                key={placeObject.place.place_id}
+              >
+                <div
+                  className={styles.image}
+                  style={
+                    placeObject.place.photos
+                      ? getPhoto(placeObject.place.photos[0].getUrl)
+                      : null
+                  }
+                />
+                <div className={styles.listElementContent}>
+                  <h3>{placeObject.place.name}</h3>
+                  <span className={styles.listElementContentAddress}>
+                    {placeObject.place.vicinity ||
+                      placeObject.place.formatted_address}
                   </span>
-                  <button
-                    className={styles.closeButton}
-                    type="submit"
-                    onClick={() => this.setState(this.baseState)}
-                  >
-                    Cancel
-                  </button>
                 </div>
-
-                <form
-                  className={styles.supportForm}
-                  onSubmit={this.submitSupport}
-                >
-                  <label className={styles.supportFormLabel}>
-                    <span className={styles.supportFormLabelText}>
-                      Privide an email address to get information how you can
-                      help this business to survive
-                    </span>
-                    <input
-                      value={this.state.emailAddress}
-                      onChange={(event) => {
-                        this.setState({ emailAddress: event.target.value });
+                <div className={styles.buttonWrapper}>
+                  {placeObject.gofundmeURL ? (
+                    <Button href={placeObject.gofundmeURL}>Donate</Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        this.handleShowYourSupport(placeObject.place);
+                        context.captcha.current.execute();
                       }}
-                      name="email"
-                      className={styles.supportFormInput}
-                      placeholder="eg. john.doe@gmail.com"
-                      type="email"
-                      required
-                    />
-                  </label>
-                  <Button type="submit">Send</Button>
-                </form>
-                {this.state.sendEmailStatus === "loading" && (
-                  <span className={styles.emailIndicator}>Sending...</span>
-                )}
-                <Link
-                  className={styles.linkToClaim}
-                  to={{
-                    pathname: "claim-business",
-                    state: {
-                      placeId: this.state.activePlace.place_id,
-                      placeName: this.state.activePlace.name,
-                    },
-                  }}
-                >
-                  Is that your business? Claim it!
-                </Link>
+                    >
+                      Support
+                    </Button>
+                  )}
+                </div>
+                {this.state.activePlace &&
+                this.state.activePlace.id === placeObject.place.id ? (
+                  <div className={styles.formWrapper}>
+                    <div className={styles.headerCard}>
+                      <span className={styles.headerCardTitle}>
+                        Tell them you are with them
+                      </span>
+                      <button
+                        className={styles.closeButton}
+                        type="submit"
+                        onClick={() => this.setState(this.baseState)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                    <form
+                      className={styles.supportForm}
+                      onSubmit={this.submitSupport}
+                    >
+                      <label className={styles.supportFormLabel}>
+                        <span className={styles.supportFormLabelText}>
+                          Privide an email address to get information how you
+                          can help this business to survive
+                        </span>
+                        <input
+                          value={this.state.emailAddress}
+                          onChange={(event) => {
+                            this.setState({ emailAddress: event.target.value });
+                          }}
+                          name="email"
+                          className={styles.supportFormInput}
+                          placeholder="eg. john.doe@gmail.com"
+                          type="email"
+                          required
+                        />
+                      </label>
+                      <Button type="submit">Send</Button>
+                    </form>
+                    {this.state.sendEmailStatus === "loading" && (
+                      <span className={styles.emailIndicator}>Sending...</span>
+                    )}
+                    <Link
+                      className={styles.linkToClaim}
+                      to={{
+                        pathname: "claim-business",
+                        state: {
+                          placeId: this.state.activePlace.place_id,
+                          placeName: this.state.activePlace.name,
+                        },
+                      }}
+                    >
+                      Is that your business? Claim it!
+                    </Link>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            ))}
           </div>
-        ))}
-      </div>
+        )}
+      </CaptchaConsumer>
     );
   }
 }
