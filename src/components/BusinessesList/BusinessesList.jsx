@@ -163,9 +163,25 @@ class BusinessesList extends Component {
                           placeName: this.state.activePlace.name,
                         },
                       }}
-                    >
-                      Is that your business? Claim it!
-                    </Link>
+                      name="email"
+                      className={styles.supportFormInput}
+                      placeholder="eg. john.doe@gmail.com"
+                      type="email"
+                      required
+                    />
+                  </label>
+                  <Button type="submit">Send</Button>
+                </form>
+                {this.state.sendEmailStatus === "loading" && (
+                  <span className={styles.emailIndicator}>Sending...</span>
+                )}
+                <Link
+                  className={styles.linkToClaim}
+                  to={`claim-business/${this.state.activePlace.place_id}`}
+                >
+                  Is that your business? Claim it!
+                </Link>
+
                   </div>
                 ) : null}
               </div>

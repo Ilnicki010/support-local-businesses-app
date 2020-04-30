@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDependentScript from "react-dependent-script";
 import Airtable from "airtable";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CaptchaConsumer } from "../../contexts/CaptchaContext";
 import { ReactComponent as ArrowLeft } from "../../assets/arrow-left.svg";
 
@@ -13,54 +13,61 @@ const base = new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_KEY }).base(
   process.env.REACT_APP_AIRTABLE_BASE
 );
 
-class ClaimYourBusiness extends React.Component {
-  state = {
-    email: "",
-    phoneNumber: null,
-    gofundmeURL: "",
-    placeId: this.props.location.state.placeId,
-    placeName: this.props.location.state.placeName,
-    status: null,
-  };
+function ClaimYourBusiness() {
+  const { placeId: placeIdParam } = useParams();
+  const [mapsLoaded, mapsError] = useScript(
+    `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`
+  );
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [gofundmeURL, setGofundmeURL] = useState("");
+  const [placeId, setPlaceId] = useState(placeIdParam);
+  const [placeName, setPlaceName] = useState("");
+  const [status, setStatus] = useState("");
 
-  componentDidMount() {
-    const service = new window.google.maps.places.PlacesService(
-      document.createElement("div")
-    );
-    service.getDetails(
-      {
-        placeId: this.state.placeId,
-        fields: ["international_phone_number"],
-      },
-      (data, status) => {
-        if (status === "OK") {
-          this.setState({
-            phoneNumber: data.international_phone_number,
-          });
+  useEffect(() => {
+    if (mapsLoaded && !mapsError) {
+      let service = new window.google.maps.places.PlacesService(
+        document.createElement("div")
+      );
+      service.getDetails(
+        {
+          placeId,
+          fields: ["international_phone_number", "name"],
+        },
+        (data, googleStatus) => {
+          if (googleStatus === "OK") {
+            setPhoneNumber(data.international_phone_number);
+            setPlaceName(data.name);
+          }
         }
-      }
-    );
-  }
+      );
 
-  createRecordAirtable = (
-    placeId,
-    gofundmeURL,
-    placeName,
-    email,
-    phoneNumber,
-    isVerified
+      return () => {
+        service = null;
+      };
+    }
+  }, [mapsLoaded]);
+
+  const createRecordAirtable = (
+    placeIdAirtable,
+    gofundmeURLAiratble,
+    placeNameAirtable,
+    emailAirtable,
+    phoneNumberAirtable,
+    isVerifiedAirtable
   ) => {
     return new Promise((resolve, reject) => {
       base(process.env.REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE).create(
         [
           {
             fields: {
-              google_places_id: placeId,
-              gofundme_url: gofundmeURL,
-              place_name: placeName,
-              email,
-              phone_number: phoneNumber,
-              is_verified: isVerified,
+              google_places_id: placeIdAirtable,
+              gofundme_url: gofundmeURLAiratble,
+              place_name: placeNameAirtable,
+              email: emailAirtable,
+              phone_number: phoneNumberAirtable,
+              is_verified: isVerifiedAirtable,
             },
           },
         ],
@@ -72,11 +79,9 @@ class ClaimYourBusiness extends React.Component {
     });
   };
 
-  sendToAirtable = (e) => {
+  const sendToAirtable = (e) => {
     e.preventDefault();
-    const { email, phoneNumber, gofundmeURL, placeId, placeName } = this.state;
-    e.preventDefault();
-    this.createRecordAirtable(
+    createRecordAirtable(
       placeId,
       gofundmeURL,
       placeName,
@@ -85,9 +90,9 @@ class ClaimYourBusiness extends React.Component {
       false
     )
       .then((data) => {
-        if (data) this.setState({ status: "sent" });
+        if (data) setStatus("sent");
       })
-      .catch(() => this.setState({ status: "error" }));
+      .catch(() => setStatus("error"));
   };
 
   render() {
@@ -106,12 +111,12 @@ class ClaimYourBusiness extends React.Component {
                   <ArrowLeft /> Back
                 </Link>
                 <h1>Claim "{placeName}"</h1>
-                <span>Tell people how to support what you are doing</span>
-                <h2>How it works?</h2>
+                <span>Tell people how to support your business!</span>
+                <h2>How does verification work?</h2>
                 <p>
-                  We use the phone number provided in your Google Place console
-                  to verify if you are the owner of the {placeName}. You will
-                  recive the text with a verification code that must be provided
+                  We use the business phone number in the Google listing
+                  to verify if you are the owner of {placeName}. You will
+                  recive a phone call from our system with a verification code that must be entered
                   here.
                 </p>
               </header>
@@ -145,7 +150,7 @@ class ClaimYourBusiness extends React.Component {
                       />
                     </div>
                     <div className={styles.formItem}>
-                      <label htmlFor="email">Email address</label>
+                      <label htmlFor="email">Your business email address where people can email their questions/comments:</label>
                       <input
                         required
                         type="email"
