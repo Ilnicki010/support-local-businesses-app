@@ -41,6 +41,7 @@
     "eject": "react-scripts eject",
     "server-dev": "node-env-run server --exec nodemon | pino-colada",
     "server": "node-env-run server | pino-colada",
+    "start-all": "run-p server start",
     "lint": "eslint src/**/*.js src/**/*.jsx"
   },
   "eslintConfig": {
