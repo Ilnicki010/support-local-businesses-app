@@ -1,4 +1,6 @@
 // Push package.json
+require("dotenv").config();
+
 const express = require("express");
 
 const app = express();
@@ -7,19 +9,18 @@ const https = require("https");
 const airtable = require("airtable");
 const session = require("express-session");
 
-const apiKey = "AIzaSyCZnuVCuprSIGEXolvCg7bkf23LWnQmebw";
-const airtableApiKey = "keyI2ZGah01mhEQdC";
-const airtableBaseId = "app7LKgKsFtsq1x8D";
-const recordTableName = "Table 1";
+const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+const airtableApiKey = process.env.REACT_APP_AIRTABLE_KEY;
+const airtableBaseId = process.env.REACT_APP_AIRTABLE_BASE;
+const recordTableName = process.env.REACT_APP_AIRTABLE_CLAIM_BUSINESS_TABLE;
 const apiParam = "key=".concat(apiKey);
 const port = 7999;
 const base = new airtable({ apiKey: airtableApiKey }).base(airtableBaseId);
 const detailsApiUrl =
   "https://maps.googleapis.com/maps/api/place/details/json?";
 
-// Change this to env variables
-const accountSid = "AC28436f699d27ca14159bd182a91209b6";
-const authToken = "59791088984e7dde72c021e2443a1df3";
+const accountSid = process.env.REACT_APP_TWILIO_SID;
+const authToken = process.env.REACT_APP_TWILIO_API_KEY;
 const client = require("twilio")(accountSid, authToken);
 
 const serviceId = "VA55b6f02979e6b058bf0afd7c3b11c7c2";
@@ -27,8 +28,7 @@ const serviceId = "VA55b6f02979e6b058bf0afd7c3b11c7c2";
 const Sentry = require("@sentry/node");
 
 Sentry.init({
-  dsn:
-    "https://efda0ec150f044478be5ff6b08620fd9@o373129.ingest.sentry.io/5188892",
+  dsn: process.env.REACT_APP_SENTRY_URL,
 });
 
 app.use(
