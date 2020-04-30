@@ -7,6 +7,8 @@ import { GPS_BUTTON } from "../../constants";
 import Button from "../Button/Button";
 import styles from "./LocationInput.module.scss";
 
+const GPSIcons = require("../../assets/gps.svg");
+
 function LocationInput({ getLocationInfo }) {
   const [address, setAddress] = useState("");
 
@@ -79,9 +81,11 @@ function LocationInput({ getLocationInfo }) {
           </div>
         )}
       </PlacesAutocomplete>
-      <Button secondary onClick={() => getUserLocation()}>
-        {GPS_BUTTON}
-      </Button>
+      <div className={styles.buttonWrapper}>
+        <button type="button" onClick={() => getUserLocation()}>
+          <img height="20px" src={GPSIcons} alt="Near me" />
+        </button>
+      </div>
     </div>
   );
 }

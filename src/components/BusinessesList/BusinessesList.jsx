@@ -155,22 +155,6 @@ class BusinessesList extends Component {
                           Sending...
                         </span>
                       )}
-                      <Link
-                        className={styles.linkToClaim}
-                        to={{
-                          pathname: "claim-business",
-                          state: {
-                            placeId: this.state.activePlace.place_id,
-                            placeName: this.state.activePlace.name,
-                          },
-                        }}
-                        name="email"
-                        className={styles.supportFormInput}
-                        placeholder="eg. john.doe@gmail.com"
-                        type="email"
-                        required
-                      />
-                      <Button type="submit">Send</Button>
                     </form>
                     {this.state.sendEmailStatus === "loading" && (
                       <span className={styles.emailIndicator}>Sending...</span>
