@@ -17,6 +17,7 @@
     "react": "^16.13.1",
     "react-dependent-script": "^1.1.2",
     "react-dom": "^16.13.1",
+    "react-google-recaptcha": "^2.0.1",
     "react-map-gl": "^5.2.3",
     "react-places-autocomplete": "^7.2.1",
     "react-router": "^5.1.2",
