@@ -110,11 +110,25 @@ function ClaimYourBusiness() {
                 <ArrowLeft /> Back
               </Link>
               <h1>Claim "{placeName}"</h1>
-              <span>Tell people how to support your business!</span>
+              <span>
+                Tell people how to support your business! On this page, you can
+                enter information about your business that will help your
+                patrons support you. Entering your fundraising link (which could
+                be a GoFundMe, a Venmo, CashApp or whatever link you want) will
+                allow your fans to support your business through this difficult
+                time. Entering your business email will allow us to forward
+                emails of patrons who have indicated interest in staying in
+                touch with your business. This email address will not be
+                displayed publicly -- we store it behind the scenes. The
+                business name and phone are not editable -- they come directly
+                from the Google listing. Before we store and display the
+                fundraising links, we do need to verify that you actually are
+                associated with that business.
+              </span>
               <h2>How does verification work?</h2>
               <p>
                 We use the business phone number in the Google listing to verify
-                if you are the owner of {placeName}. You will recive a phone
+                if you are the owner of {placeName}. You will receive a phone
                 call from our system with a verification code that must be
                 entered here.
               </p>
