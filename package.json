@@ -4,14 +4,20 @@
   "private": true,
   "dependencies": {
     "@sentry/browser": "^5.15.4",
+    "@sentry/node": "^5.15.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@turf/circle": "^6.0.1",
     "@turf/turf": "^5.1.6",
     "airtable": "^0.8.1",
+    "authy": "^1.4.0",
     "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
     "d3-ease": "^1.0.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "https": "^1.0.0",
     "mapbox-gl": "^1.9.0",
     "qs": "^6.9.3",
     "react": "^16.13.1",
@@ -24,13 +30,16 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
-    "turf-point": "^2.0.1"
+    "turf-point": "^2.0.1",
+    "twilio": "^3.43.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "server-dev": "node-env-run server --exec nodemon | pino-colada",
+    "server": "node-env-run server | pino-colada",
     "lint": "eslint src/**/*.js src/**/*.jsx"
   },
   "eslintConfig": {
@@ -56,7 +65,12 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
+    "express-pino-logger": "^5.0.0",
+    "node-env-run": "^3.0.2",
     "node-sass": "^4.13.1",
+    "nodemon": "^2.0.3",
+    "npm-run-all": "^4.1.5",
+    "pino-colada": "^1.6.1",
     "prettier": "^2.0.2"
   }
 }
