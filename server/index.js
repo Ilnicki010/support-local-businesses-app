@@ -60,7 +60,7 @@ app.post("/claim", function (req, res) {
     { key: "go_fund", value: go_fund },
   ];
 
-  const placeParam = "place_id=".concat(placeId);
+  const placeParam = "place_id=".concat(place_Id);
   const detailsUri = detailsApiUrl
     .concat(placeParam)
     .concat("&")
@@ -82,17 +82,20 @@ app.post("/claim", function (req, res) {
         res.status(400).send(value.error_message || value.status);
         return;
       }
+      console.log(value);
+      console.log("------------------");
+      console.log(value.international_phone_number);
 
       // Check phone number
       if (
-        removeAllChars(value.formatted_phone_number) !=
+        removeAllChars(value.result.formatted_phone_number) !=
           removeAllChars(phone_number) &&
-        removeAllChars(value.international_phone_number) !=
+        removeAllChars(value.result.international_phone_number) !=
           removeAllChars(phone_number)
       ) {
         const error_p = `${removeAllChars(
-          value.formatted_phone_number
-        )}or${removeAllChars(value.international_phone_number)}`;
+          value.result.formatted_phone_number
+        )}or${removeAllChars(value.result.international_phone_number)}`;
         sendSentryException(
           { key: "/claim", value: `Given phone did not match${error_p}` },
           email,
