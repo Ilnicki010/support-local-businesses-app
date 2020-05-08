@@ -65,7 +65,6 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-        console.log('one2');
         res.status(400).send("Invalid phone number");
         return;
       }

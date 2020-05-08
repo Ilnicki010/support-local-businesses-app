@@ -46,23 +46,41 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
               );
             },
             (reason2) => {
+              helpers.logSentry(
+                    { key: "/check", value: `No Airtable ID found for the google place id` },
+                       email,
+                    {
+                     name: "No Airtable ID found for the google place id",
+                     message: `No airtable ID found for $place_id`,
+                    },
+                    sentry_extras, Sentry
+                  );
               res.status(400).send(reason2);
               return;
             }
           );
         }
-        helpers.logSentry(
-          { key: "/checkVerification", value: `${entered_code}Code denied` },
-          email,
-          { name: "Code Denied", message: `${entered_code} is incorrect` },
-          sentry_extras, Sentry
-        );
-        res.status(400).send("Code denied");
-        return;
+
+        if (verification_check.status == "denied") {
+          helpers.logSentry(
+            { key: "/check", value: `Code denied` },
+            email,
+            { name: "Code Denied", message: `${entered_code} is incorrect` },
+            sentry_extras, Sentry
+          );
+          res.status(400).send("Code denied");
+          return;
+        }
       },
-      (reason) => {
-        res.status(400).send(reason);
-        return;
-      }
-    );
+        (reason) => {
+          helpers.logSentry(
+            { key: "/check", value: `Verification Check Failed` },
+            email,
+            { name: "Verification Check Failed", message: `Verification check failed for $phone_number` },
+            sentry_extras, Sentry
+          );
+          res.status(400).send(reason);
+          return;
+        }
+      );
 }
