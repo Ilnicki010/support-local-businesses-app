@@ -91,7 +91,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                  email,
               {
                name: "Twilio Verification send error",
-               message: `Could not create verification for $value.result.international_phone_number `,
+               message: `Could not create verification for $phone_number `,
               },
               sentry_extras, Sentry
             );

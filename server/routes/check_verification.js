@@ -31,6 +31,15 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                   return;
                 },
                 (reason1) => {
+                  helpers.logSentry(
+                    { key: "/check", value: `Verification update error` },
+                       email,
+                    {
+                     name: "Verification update error",
+                     message: `Could not update verification for airtable ID: $id `,
+                    },
+                    sentry_extras, Sentry
+                  );
                   res.status(400).send(reason1);
                   return;
                 }
