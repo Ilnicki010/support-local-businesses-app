@@ -34,7 +34,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
     (value) => {
       if (value.status != "OK") {
         helpers.logSentry(
-          { key: "/claim", value: `Couldnt fetch place id` },
+          { key: "/claim", value: `Fetch PlaceID Error` },
           email,
           {
             name: "Fetch PlaceID Error",
@@ -57,7 +57,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           value.result.formatted_phone_number
         )}or${helpers.editPhone(value.result.international_phone_number)}`;
         helpers.logSentry(
-          { key: "/claim", value: `Given phone did not match` },
+          { key: "/claim", value: `Number mismatch Error` },
           email,
           {
             name: "Number mismatch Error",
@@ -102,7 +102,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
     },
     (reason) => {
       helpers.logSentry(
-          { key: "/claim", value: `Couldnt fetch place id` },
+          { key: "/claim", value: `Fetch PlaceID Error` },
           email,
           {
             name: "Fetch PlaceID Error",
