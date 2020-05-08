@@ -25,7 +25,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
         if (verification_check.status == "approved") {
           helpers.fetchAirtableId(place_id,airtableRecords).then(
             (id) => {
-              helpers.updateClaim(id).then(
+              helpers.updateClaim(id,constants,base).then(
                 (val) => {
                   res.status(200).send("Verified");
                   return;
