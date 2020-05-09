@@ -9,7 +9,7 @@ class MapComponent extends React.Component {
       latitude: this.props.userLocation.lat,
       longitude: this.props.userLocation.lng,
       width: "100%",
-      height: "50vh",
+      height: "100vh",
       zoom: 10,
     },
   };
@@ -62,7 +62,7 @@ class MapComponent extends React.Component {
           transitionInterpolator={new FlyToInterpolator()}
           style={{ position: "relative" }}
           {...viewport}
-          mapStyle="mapbox://styles/mapbox/light-v9"
+          mapStyle="mapbox://styles/mapbox/dark-v10"
           onViewportChange={(viewportChange) =>
             this.setState({ viewport: viewportChange })
           }

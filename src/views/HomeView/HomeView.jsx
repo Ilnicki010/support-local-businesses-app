@@ -202,30 +202,30 @@ class HomeView extends React.Component {
         ]}
       >
         <main className={styles.siteWrapper}>
-          <header className={styles.siteHeader}>
-            <img
-              src={TopLogo}
-              alt="Save Small Biz"
-              className={styles.headerLogo}
-            />
-            <div className={styles.locationBox}>
-              <LocationInput
-                getLocationInfo={(latlng, address) =>
-                  this.getLocation(latlng, address)
-                }
+          <div className={styles.bottomSectionWrapper}>
+            <div className={styles.searchWrapper}>
+              <img
+                src={TopLogo}
+                alt="Save Small Biz"
+                className={styles.headerLogo}
               />
+              <div className={styles.locationBox}>
+                <LocationInput
+                  getLocationInfo={(latlng, address) =>
+                    this.getLocation(latlng, address)
+                  }
+                />
+              </div>
+              <div className={styles.filterContainer}>
+                <InputSelectCombo
+                  className={styles.searchFilterInput}
+                  placeholder="Select search type or enter keywords..."
+                  options={FILTER_LIST}
+                  onOptionSelect={this.onOptionSelect}
+                  onFreeTextEntry={this.onFreeTextEntry}
+                />
+              </div>
             </div>
-            <div className={styles.filterContainer}>
-              <InputSelectCombo
-                className={styles.searchFilterInput}
-                placeholder="Select search type or enter keywords..."
-                options={FILTER_LIST}
-                onOptionSelect={this.onOptionSelect}
-                onFreeTextEntry={this.onFreeTextEntry}
-              />
-            </div>
-          </header>
-          <div className={styles.resultsTableWrapper}>
             <section className={styles.resultsTable}>
               {this.state.resultPlaces.length > 0 ? (
                 <h2 className={styles.resultsTitle}>
@@ -253,15 +253,15 @@ class HomeView extends React.Component {
               )}
               {this.state.loading && <span>loading...</span>}
             </section>
-            <div className={styles.mapWrapper}>
-              {this.state.searchQuery.location.lat && (
-                <MapComponent
-                  userLocation={this.state.searchQuery.location}
-                  places={this.state.resultPlaces}
-                  activePlace={this.state.activePlace}
-                />
-              )}
-            </div>
+          </div>
+          <div className={styles.mapWrapper}>
+            {this.state.searchQuery.location.lat && (
+              <MapComponent
+                userLocation={this.state.searchQuery.location}
+                places={this.state.resultPlaces}
+                activePlace={this.state.activePlace}
+              />
+            )}
           </div>
         </main>
       </ReactDependentScript>
