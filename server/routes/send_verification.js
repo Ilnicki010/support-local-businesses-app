@@ -29,7 +29,6 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
     .concat(apiParam)
     .concat("&fields=formatted_phone_number,international_phone_number");
 
-  console.log(detailsUri);
   helpers.placeDetails(detailsUri,https).then(
     (value) => {
       if (value.status != "OK") {
@@ -42,7 +41,6 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-        console.log('one1');
         res.status(400).send(value.error_message || value.status);
         return;
       }
@@ -68,10 +66,12 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
         res.status(400).send("Invalid phone number");
         return;
       }
-    
+
+      var send_phone_num = `+${helpers.editPhone(value.result.international_phone_number)}`;
+      req.session.send_phone_num = send_phone_num;
       client.verify
         .services(serviceId)
-        .verifications.create({ to: phone_number, channel: "sms" })
+        .verifications.create({ to: send_phone_num, channel: "call" })
         .then(
           (verification) => {
             console.log(verification);
@@ -90,7 +90,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                  email,
               {
                name: "Twilio Verification send error",
-               message: `Could not create verification for $phone_number `,
+               message: `Could not create verification for ${send_phone_num} `,
               },
               sentry_extras, Sentry
             );
@@ -109,7 +109,6 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-      console.log(reason);
       res.status(400).send(reason);
       return;
     }

@@ -1,4 +1,4 @@
-function updateRecordToIsVerified(id,constants,base) {
+module.exports = function(id,constants,base) {
   const updateJson = {
     id,
     fields: {

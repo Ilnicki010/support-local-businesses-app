@@ -63,16 +63,5 @@ const server = app.listen(port, () => {
     return;
   }
 
-  helpers.fetchRecords(base,constants).then(data => {
-    if(!data) {
-      server.close();
-      return;
-    }
-    airtableRecords = data;
-    console.log(`Listening on port ${port}`);
-  }, reject => {
-    console.log(reject);
-    server.close();
-    return;
-  });
+  console.log(`Listening on port ${port}`);
 });

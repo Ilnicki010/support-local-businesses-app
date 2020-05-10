@@ -3,27 +3,30 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
       apiKey, airtableApiKey, airtableBaseId, recordTableName,
       port,detailsApiUrl,accountSid, authToken,serviceId, sentryUrl
   } = constants;
+  
   const entered_code = req.body.code;
   const place_Id = req.session.place_id;
   const { place_name } = req.session;
   const { email } = req.session;
   const { phone_number } = req.session;
   const { go_fund } = req.session;
+  const { send_phone_num } = req.session;
+
   const sentry_extras = [
     { key: "place_id", value: place_Id },
     { key: "place_name", value: place_name },
     { key: "email", value: email },
-    { key: "phone_number", value: phone_number },
+    { key: "phone_number", value: send_phone_num },
     { key: "go_fund", value: go_fund },
   ];
-
+  
   client.verify
     .services(serviceId)
-    .verificationChecks.create({ to: phone_number, code: entered_code })
+    .verificationChecks.create({ to: send_phone_num, code: entered_code })
     .then(
       (verification_check) => {
         if (verification_check.status == "approved") {
-          helpers.fetchAirtableId(place_id,airtableRecords).then(
+          helpers.fetchAirtableId(base,constants,place_Id).then(
             (id) => {
               helpers.updateClaim(id,constants,base).then(
                 (val) => {
@@ -36,7 +39,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                        email,
                     {
                      name: "Verification update error",
-                     message: `Could not update verification for airtable ID: $id `,
+                     message: `Could not update verification for airtable ID: ${id} and phone number ${send_phone_num}`,
                     },
                     sentry_extras, Sentry
                   );
@@ -47,11 +50,11 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
             },
             (reason2) => {
               helpers.logSentry(
-                    { key: "/check", value: `No Airtable ID found for the google place id` },
+                    { key: "/check", value: `Airtable ID fetch error` },
                        email,
                     {
-                     name: "No Airtable ID found for the google place id",
-                     message: `No airtable ID found for $place_id`,
+                     name: "Airtable ID fetch error",
+                     message: reason2,
                     },
                     sentry_extras, Sentry
                   );
@@ -61,11 +64,11 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           );
         }
 
-        if (verification_check.status == "denied") {
+        else {
           helpers.logSentry(
             { key: "/check", value: `Code denied` },
             email,
-            { name: "Code Denied", message: `${entered_code} is incorrect` },
+            { name: "Code Denied", message: `Code ${entered_code} is incorrect for ${send_phone_num}` },
             sentry_extras, Sentry
           );
           res.status(400).send("Code denied");
@@ -76,7 +79,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           helpers.logSentry(
             { key: "/check", value: `Verification Check Failed` },
             email,
-            { name: "Verification Check Failed", message: `Verification check failed for $phone_number` },
+            { name: "Verification Check Failed", message: `Verification check failed for ${send_phone_num}` },
             sentry_extras, Sentry
           );
           res.status(400).send(reason);
