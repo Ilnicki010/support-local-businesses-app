@@ -1,7 +1,3 @@
-// To do:
-// Add Sentry check for airtable connection fail abd missing process.ens
-// Add start script tp pacage.kson
-// Change call -> sms
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -30,7 +26,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use(session({ secret: serviceId + constants.accountSid + authToken }));
+app.use(session({ secret: serviceId + accountSid + authToken }));
 
 app.post("/sendClaim", function (req, res) {
   routes.sendVerification(req,res,constants,helpers,Sentry,client,base,airtableRecords,apiParam,https);
