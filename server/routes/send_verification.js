@@ -74,7 +74,6 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
         .verifications.create({ to: send_phone_num, channel: "call" })
         .then(
           (verification) => {
-            console.log(verification);
             if (verification.status == "approved") {
               res.status(200).send("Already claimed by user");
               return;
