@@ -19,9 +19,9 @@ The primary goal for this backend service is to enable a user to claim their bus
 - Returned HTTP codes and responses:
 	- 200: 'Already claimed by user'
 	- 200: 'Successfully sent confirmation'
-	- 500: Error message from google place details, Sentry exception: Fetch PlaceID Error
+	- 403: Error message from google place details, Sentry exception: Fetch PlaceID Error
 	- 401: 'Invalid phone number', Sentry exception: Number mismatch Error
-	- 500: Error message from Twilio, Sentry exception: Verification create error
+	- 403: Error message from Twilio, Sentry exception: Verification create error
 	- 400: 'Missing body parameters'
 
 # /checkClaim
@@ -31,7 +31,7 @@ The primary goal for this backend service is to enable a user to claim their bus
 - This endpoint will validate the code sent to a user and accordingly update a user's record in airtable
 - Returned HTTP codes and responses:
 	- 200: 'Verified'
-	- 500: Error message from Airtable, Sentry exception: Verification update error, Airtable ID fetch error
+	- 403: Error message from Airtable, Sentry exception: Verification update error, Airtable ID fetch error
 	- 401: 'Code Denied', Sentry exception: Code Denied
-	- 500: Error message from Twilio, Sentry exception: Verification Check Failed
+	- 403: Error message from Twilio, Sentry exception: Verification Check Failed
 	- 400: 'Missing body parameters'

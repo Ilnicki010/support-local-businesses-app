@@ -48,7 +48,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                     },
                     sentry_extras, Sentry
                   );
-                  res.status(500).send(reason1);
+                  res.status(403).send(reason1);
                   return;
                 }
               );
@@ -63,7 +63,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                     },
                     sentry_extras, Sentry
                   );
-              res.status(500).send(reason2);
+              res.status(403).send(reason2);
               return;
             }
           );
@@ -87,7 +87,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
             { name: "Verification Check Failed", message: `Verification check failed for ${send_phone_num}` },
             sentry_extras, Sentry
           );
-          res.status(500).send(reason);
+          res.status(403).send(reason);
           return;
         }
       );

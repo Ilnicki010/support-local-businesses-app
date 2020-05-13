@@ -46,7 +46,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-        res.status(500).send(value.error_message || value.status);
+        res.status(403).send(value.error_message || value.status);
         return;
       }
       
@@ -98,7 +98,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
               },
               sentry_extras, Sentry
             );
-            res.status(500).send(reason);
+            res.status(403).send(reason);
             return;
           }
         );
@@ -113,7 +113,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-      res.status(500).send(reason);
+      res.status(403).send(reason);
       return;
     }
   );
