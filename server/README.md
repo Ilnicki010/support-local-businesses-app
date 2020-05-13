@@ -1,4 +1,4 @@
-# Backend service for SpotifySocial
+# Backend service for SaveSmall
 
 The primary goal for this backend service is to enable a user to claim their business
 
