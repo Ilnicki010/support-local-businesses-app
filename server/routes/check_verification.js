@@ -21,7 +21,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
   ];
   
   if(!entered_code || !place_Id || !send_phone_num) {
-    res.send(400).send('Missing body parameters');
+    res.status(400).send('Missing body parameters');
     return;
   }
 
