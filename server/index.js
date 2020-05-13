@@ -37,6 +37,7 @@ app.post("/checkClaim", function (req, res) {
 });
 
 const server = app.listen(port, () => {
+  console.log('e');
   if(!helpers.checkEnv(server,helpers,constants)) {
     return;
   }

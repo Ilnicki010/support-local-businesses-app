@@ -22,6 +22,11 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
     { key: "go_fund", value: go_fund },
   ];
 
+  if(!place_Id || !phone_number) {
+    res.send(400).send('Missing body parameters');
+    return;
+  }
+
   const placeParam = "place_id=".concat(place_Id);
   const detailsUri = detailsApiUrl
     .concat(placeParam)
@@ -41,7 +46,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-        res.status(400).send(value.error_message || value.status);
+        res.status(500).send(value.error_message || value.status);
         return;
       }
       
@@ -63,7 +68,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-        res.status(400).send("Invalid phone number");
+        res.status(401).send("Invalid phone number");
         return;
       }
 
@@ -88,12 +93,12 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
               { key: "/claim", value: `Verification create error` },
                  email,
               {
-               name: "Twilio Verification send error",
+               name: "Verification create error",
                message: `Could not create verification for ${send_phone_num} `,
               },
               sentry_extras, Sentry
             );
-            res.status(400).send(reason);
+            res.status(500).send(reason);
             return;
           }
         );
@@ -108,7 +113,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
           },
           sentry_extras, Sentry
         );
-      res.status(400).send(reason);
+      res.status(500).send(reason);
       return;
     }
   );
