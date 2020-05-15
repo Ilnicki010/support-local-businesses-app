@@ -20,6 +20,11 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
     { key: "go_fund", value: go_fund },
   ];
   
+  if(!entered_code || !place_Id || !send_phone_num) {
+    res.status(400).send('Missing body parameters');
+    return;
+  }
+
   client.verify
     .services(serviceId)
     .verificationChecks.create({ to: send_phone_num, code: entered_code })
@@ -43,7 +48,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                     },
                     sentry_extras, Sentry
                   );
-                  res.status(400).send(reason1);
+                  res.status(403).send(reason1);
                   return;
                 }
               );
@@ -58,7 +63,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
                     },
                     sentry_extras, Sentry
                   );
-              res.status(400).send(reason2);
+              res.status(403).send(reason2);
               return;
             }
           );
@@ -66,12 +71,12 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
 
         else {
           helpers.logSentry(
-            { key: "/check", value: `Code denied` },
+            { key: "/check", value: `Code Denied` },
             email,
             { name: "Code Denied", message: `Code ${entered_code} is incorrect for ${send_phone_num}` },
             sentry_extras, Sentry
           );
-          res.status(400).send("Code denied");
+          res.status(401).send("Code Denied");
           return;
         }
       },
@@ -82,7 +87,7 @@ module.exports = function(req,res,constants,helpers,Sentry,client,base,airtableR
             { name: "Verification Check Failed", message: `Verification check failed for ${send_phone_num}` },
             sentry_extras, Sentry
           );
-          res.status(400).send(reason);
+          res.status(403).send(reason);
           return;
         }
       );
