@@ -244,12 +244,14 @@ class HomeView extends React.Component {
                 </h2>
               ) : null}
               {this.state.resultPlaces && (
-                <BusinessesList
-                  listOfPlaces={this.state.resultPlaces}
-                  getActivePlace={(place) =>
-                    this.setState({ activePlace: { ...place } })
-                  }
-                />
+                <div className={styles.listWrapper}>
+                  <BusinessesList
+                    listOfPlaces={this.state.resultPlaces}
+                    getActivePlace={(place) =>
+                      this.setState({ activePlace: { ...place } })
+                    }
+                  />
+                </div>
               )}
               {this.state.loading && <span>loading...</span>}
             </section>

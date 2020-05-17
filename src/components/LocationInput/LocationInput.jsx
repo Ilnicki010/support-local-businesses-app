@@ -28,7 +28,7 @@ function LocationInput({ getLocationInfo }) {
 
   const handleSelect = (addressFromInput) => {
     setAddress(addressFromInput);
-    geocodeByAddress(address)
+    geocodeByAddress(addressFromInput)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => getLocationInfo(latLng, addressFromInput))
       .catch((error) => console.error("Error", error));

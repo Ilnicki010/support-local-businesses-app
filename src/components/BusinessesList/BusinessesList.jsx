@@ -169,16 +169,13 @@ class BusinessesList extends Component {
 
                         <Button type="submit">Send</Button>
                       </div>
-
                       {this.state.sendEmailStatus === "loading" && (
                         <span className={styles.emailIndicator}>
                           Sending...
                         </span>
                       )}
                     </form>
-                    {this.state.sendEmailStatus === "loading" && (
-                      <span className={styles.emailIndicator}>Sending...</span>
-                    )}
+
                     <Link
                       className={styles.linkToClaim}
                       to={`claim-business/${this.state.activePlace.place_id}`}
