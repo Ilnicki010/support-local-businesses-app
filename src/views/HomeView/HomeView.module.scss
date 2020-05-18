@@ -8,6 +8,7 @@
   grid-template-columns: 1fr 2fr;
   height: 100vh;
   width: 100vw;
+  padding: 10px;
 }
 .resultsTitle {
   position: relative;
@@ -23,6 +24,7 @@
   padding: 20px;
   text-align: left;
   background: map-get($colors, baseWhite);
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -31,7 +33,7 @@
   }
 }
 .searchWrapper {
-  background: #fff;
+  background: map-get($colors, baseWhite);
   z-index: 99;
 }
 .headerLogo {
@@ -42,7 +44,7 @@
 .locationBox,
 .filterContainer {
   height: 50px;
-  z-index: 999999;
+  z-index: 9999;
   margin: 20px 0;
 }
 

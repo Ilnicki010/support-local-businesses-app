@@ -256,15 +256,17 @@ class HomeView extends React.Component {
               {this.state.loading && <span>loading...</span>}
             </section>
           </div>
-          <div className={styles.mapWrapper}>
-            {this.state.searchQuery.location.lat && (
-              <MapComponent
-                userLocation={this.state.searchQuery.location}
-                places={this.state.resultPlaces}
-                activePlace={this.state.activePlace}
-              />
-            )}
-          </div>
+          {window.screen.width > 720 && (
+            <div className={styles.mapWrapper}>
+              {this.state.searchQuery.location.lat && (
+                <MapComponent
+                  userLocation={this.state.searchQuery.location}
+                  places={this.state.resultPlaces}
+                  activePlace={this.state.activePlace}
+                />
+              )}
+            </div>
+          )}
         </main>
       </ReactDependentScript>
     );
