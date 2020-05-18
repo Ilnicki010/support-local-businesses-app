@@ -7,6 +7,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   height: 100vh;
+  grid-gap: 10px;
   width: 100vw;
   padding: 10px;
 }
@@ -24,7 +25,7 @@
   padding: 20px;
   text-align: left;
   background: map-get($colors, baseWhite);
-
+  background: #3a8cc31a;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -33,13 +34,13 @@
   }
 }
 .searchWrapper {
-  background: map-get($colors, baseWhite);
+  background: transparent;
   z-index: 99;
 }
 .headerLogo {
   display: none;
   width: 100%;
-  background: map-get($colors, baseWhite);
+  background: transparent;
 }
 .locationBox,
 .filterContainer {
@@ -52,7 +53,20 @@
   color: map-get($colors, secondary);
   margin: 0 5px;
 }
-
+.provideLocation {
+  @include flex();
+  width: 100%;
+  text-align: center;
+  padding: 10%;
+  font-size: map-get($font-size, small);
+}
+.homeContent {
+  padding: 10%;
+  div {
+    // @include flex(flex-start, flex-start);
+    // text-align: left;
+  }
+}
 @media screen and (max-width: 720px) {
   .siteWrapper {
     width: 100vw;
