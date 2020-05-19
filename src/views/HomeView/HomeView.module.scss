@@ -6,10 +6,10 @@
   visibility: initial;
   display: grid;
   grid-template-columns: 1fr 2fr;
-  height: 100vh;
+  height: calc(100vh - 80px);
   grid-gap: 10px;
   width: 100vw;
-  padding: 10px;
+  padding: 0 10px 0 10px;
 }
 .resultsTitle {
   position: relative;
@@ -24,7 +24,7 @@
   z-index: 999;
   padding: 20px;
   text-align: left;
-  background: map-get($colors, baseWhite);
+  border-radius: map-get($border-radius, regular);
   background: #3a8cc31a;
   &::-webkit-scrollbar {
     display: none;
@@ -62,9 +62,10 @@
 }
 .homeContent {
   padding: 10%;
+}
+.mapWrapper {
   div {
-    // @include flex(flex-start, flex-start);
-    // text-align: left;
+    border-radius: map-get($border-radius, regular);
   }
 }
 @media screen and (max-width: 720px) {

@@ -10,7 +10,6 @@ import {
   SEARCH_ERROR_MESSAGE,
   AUTO_SELECT_FIRST_FILTER,
 } from "../../constants";
-import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import InputSelectCombo from "../../components/InputSelectCombo/InputSelectCombo";
 
@@ -204,11 +203,6 @@ class HomeView extends React.Component {
         <main className={styles.siteWrapper}>
           <div className={styles.bottomSectionWrapper}>
             <div className={styles.searchWrapper}>
-              <img
-                src={TopLogo}
-                alt="Save Small Biz"
-                className={styles.headerLogo}
-              />
               <div className={styles.locationBox}>
                 <LocationInput
                   getLocationInfo={(latlng, address) =>
