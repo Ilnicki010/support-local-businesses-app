@@ -10,6 +10,8 @@
   padding: 0 12px;
   box-shadow: 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 11px hsla(0, 0%, 0%, 0.1);
   position: absolute;
+  bottom: 0;
+  transform: translateY(110%);
   width: 100%;
   background: #fff;
 }

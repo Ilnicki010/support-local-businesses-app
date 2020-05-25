@@ -1,0 +1,32 @@
+@mixin box-shadow($top, $left, $blur, $spread, $color) {
+  -webkit-box-shadow: $top $left $blur $spread $color;
+  -moz-box-shadow: $top $left $blur $spread $color;
+  box-shadow: $top $left $blur $spread $color;
+}
+
+@mixin flex(
+  $align: center,
+  $justify-content: center,
+  $direction: column,
+  $wrap: true
+) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify-content;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+@mixin absolute-center() {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+@mixin background-cover() {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

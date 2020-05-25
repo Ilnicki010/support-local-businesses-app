@@ -4,6 +4,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ClaimYourBusiness from "./views/ClaimYourBusiness/ClaimYourBusiness";
 import HomeView from "./views/HomeView/HomeView";
+import HeaderNav from "./components/HeaderNav/HeaderNav";
 import { CaptchaProvider } from "./contexts/CaptchaContext";
 
 const App = () => {
@@ -12,8 +13,13 @@ const App = () => {
     <div className="App">
       <CaptchaProvider value={{ captcha: captchaRef }}>
         <Router>
+          <HeaderNav />
           <Switch>
-            <Route path="/claim-business/:placeId" exact component={ClaimYourBusiness} />
+            <Route
+              path="/claim-business/:placeId"
+              exact
+              component={ClaimYourBusiness}
+            />
             <Route path="/" exact component={HomeView} />
           </Switch>
         </Router>

@@ -1,25 +1,24 @@
-a{
-    text-decoration: none;
-    
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
+
+a {
+  text-decoration: none;
 }
-.button{
-    background: #555;
-    border: none;
-    color: #fff;
-    border-radius: 5px;
-    font-size:.7em;
-    font-weight: 600;
-    padding: 10px 20px;
-    cursor: pointer;
-    opacity: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    &Secondary{
-        @extend .button;
-        background: transparent;
-        color: #222;
-        border:1px solid #222
-    }
+.button {
+  @include flex();
+  background: map-get($colors, primary);
+  border: none;
+  color: map-get($colors, baseWhite);
+  border-radius: map-get($border-radius, small);
+  font-size: map-get($font-size, small);
+  font-weight: map-get($font-weight, semi-bold);
+  padding: 10px 20px;
+  cursor: pointer;
+  opacity: 1;
+  &Secondary {
+    @extend .button;
+    background: transparent;
+    color: map-get($colors, baseBlack);
+    border: 1px solid map-get($colors, baseBlack);
+  }
 }

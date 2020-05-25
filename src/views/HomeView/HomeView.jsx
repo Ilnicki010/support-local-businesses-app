@@ -10,7 +10,6 @@ import {
   SEARCH_ERROR_MESSAGE,
   AUTO_SELECT_FIRST_FILTER,
 } from "../../constants";
-import TopLogo from "../../assets/SOSB_Logo_1600x648.png";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import InputSelectCombo from "../../components/InputSelectCombo/InputSelectCombo";
 
@@ -202,30 +201,25 @@ class HomeView extends React.Component {
         ]}
       >
         <main className={styles.siteWrapper}>
-          <header className={styles.siteHeader}>
-            <img
-              src={TopLogo}
-              alt="Save Small Biz"
-              className={styles.headerLogo}
-            />
-            <div className={styles.locationBox}>
-              <LocationInput
-                getLocationInfo={(latlng, address) =>
-                  this.getLocation(latlng, address)
-                }
-              />
+          <div className={styles.bottomSectionWrapper}>
+            <div className={styles.searchWrapper}>
+              <div className={styles.locationBox}>
+                <LocationInput
+                  getLocationInfo={(latlng, address) =>
+                    this.getLocation(latlng, address)
+                  }
+                />
+              </div>
+              <div className={styles.filterContainer}>
+                <InputSelectCombo
+                  className={styles.searchFilterInput}
+                  placeholder="Select search type or enter keywords..."
+                  options={FILTER_LIST}
+                  onOptionSelect={this.onOptionSelect}
+                  onFreeTextEntry={this.onFreeTextEntry}
+                />
+              </div>
             </div>
-            <div className={styles.filterContainer}>
-              <InputSelectCombo
-                className={styles.searchFilterInput}
-                placeholder="Select search type or enter keywords..."
-                options={FILTER_LIST}
-                onOptionSelect={this.onOptionSelect}
-                onFreeTextEntry={this.onFreeTextEntry}
-              />
-            </div>
-          </header>
-          <div className={styles.resultsTableWrapper}>
             <section className={styles.resultsTable}>
               {this.state.resultPlaces.length > 0 ? (
                 <h2 className={styles.resultsTitle}>
@@ -243,26 +237,65 @@ class HomeView extends React.Component {
                   </span>
                 </h2>
               ) : null}
-              {this.state.resultPlaces && (
-                <BusinessesList
-                  listOfPlaces={this.state.resultPlaces}
-                  getActivePlace={(place) =>
-                    this.setState({ activePlace: { ...place } })
-                  }
-                />
+              {this.state.resultPlaces ? (
+                <div className={styles.listWrapper}>
+                  <BusinessesList
+                    listOfPlaces={this.state.resultPlaces}
+                    getActivePlace={(place) =>
+                      this.setState({ activePlace: { ...place } })
+                    }
+                  />
+                </div>
+              ) : null}
+              {!this.state.searchQuery.location.name && (
+                <div className={styles.provideLocation}>
+                  <img
+                    src={require("../../assets/ilustrations/undraw_my_location_f9pr.svg")}
+                    alt=""
+                    height="150px"
+                  />
+                  <p>
+                    Search your city and keywords to find local businesses that
+                    need your help.
+                  </p>
+                </div>
               )}
               {this.state.loading && <span>loading...</span>}
             </section>
+          </div>
+          {window.screen.width > 720 && (
             <div className={styles.mapWrapper}>
-              {this.state.searchQuery.location.lat && (
+              {this.state.searchQuery.location.lat ? (
                 <MapComponent
                   userLocation={this.state.searchQuery.location}
                   places={this.state.resultPlaces}
                   activePlace={this.state.activePlace}
                 />
+              ) : (
+                <div className={styles.homeContent}>
+                  <img
+                    src={require("../../assets/ilustrations/undraw_bear_market_ania.svg")}
+                    alt=""
+                    height="200px"
+                  />
+                  <div>
+                    <h1>Small businesses need your help.</h1>
+                    <p>
+                      Our communities are perilously close to losing our local
+                      treasures. Local businesses are struggling to survive.
+                      SaveSmall.org is a resource for locals to quickly connect
+                      with their favorite small businesses and show their
+                      support.
+                    </p>
+                    <p>
+                      Together, we can save the businesses that anchor our lives
+                      and make our communities vibrant and welcoming.
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
-          </div>
+          )}
         </main>
       </ReactDependentScript>
     );

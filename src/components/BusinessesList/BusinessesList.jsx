@@ -77,41 +77,53 @@ class BusinessesList extends Component {
     return (
       <CaptchaConsumer>
         {(context) => (
-          <div className="business-tile">
+          <div className={styles.list}>
             {listOfPlaces.map((placeObject) => (
               <div
-                className={styles.listElement}
+                className={
+                  this.state.activePlace &&
+                  this.state.activePlace.id === placeObject.place.id
+                    ? styles.listElementActive
+                    : styles.listElement
+                }
                 key={placeObject.place.place_id}
               >
-                <div
-                  className={styles.image}
-                  style={
-                    placeObject.place.photos
-                      ? getPhoto(placeObject.place.photos[0].getUrl)
-                      : null
-                  }
-                />
-                <div className={styles.listElementContent}>
-                  <h3>{placeObject.place.name}</h3>
-                  <span className={styles.listElementContentAddress}>
-                    {placeObject.place.vicinity ||
-                      placeObject.place.formatted_address}
-                  </span>
+                <div className={styles.listElementInner}>
+                  <div className={styles.imageWrapper}>
+                    <div
+                      className={styles.image}
+                      style={
+                        placeObject.place.photos
+                          ? getPhoto(placeObject.place.photos[0].getUrl)
+                          : null
+                      }
+                    />
+                  </div>
+                  <div className={styles.listElementInnerContent}>
+                    <div>
+                      <h3>{placeObject.place.name}</h3>
+                      <p className={styles.listElementInnerContentAddress}>
+                        {placeObject.place.vicinity ||
+                          placeObject.place.formatted_address}
+                      </p>
+                    </div>
+                    <div className={styles.buttonWrapper}>
+                      {placeObject.gofundmeURL ? (
+                        <Button href={placeObject.gofundmeURL}>Donate</Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            this.handleShowYourSupport(placeObject.place);
+                            context.captcha.current.execute();
+                          }}
+                        >
+                          Support
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className={styles.buttonWrapper}>
-                  {placeObject.gofundmeURL ? (
-                    <Button href={placeObject.gofundmeURL}>Donate</Button>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        this.handleShowYourSupport(placeObject.place);
-                        context.captcha.current.execute();
-                      }}
-                    >
-                      Support
-                    </Button>
-                  )}
-                </div>
+
                 {this.state.activePlace &&
                 this.state.activePlace.id === placeObject.place.id ? (
                   <div className={styles.formWrapper}>
@@ -120,11 +132,15 @@ class BusinessesList extends Component {
                         Tell them you are with them
                       </span>
                       <button
-                        className={styles.closeButton}
+                        className={styles.headerCardButton}
                         type="submit"
                         onClick={() => this.setState(this.baseState)}
                       >
-                        Cancel
+                        <img
+                          width="10px"
+                          src={require("../../assets/close.svg")}
+                          alt=""
+                        />
                       </button>
                     </div>
 
@@ -133,10 +149,12 @@ class BusinessesList extends Component {
                       onSubmit={this.submitSupport}
                     >
                       <label className={styles.supportFormLabel}>
-                        <span className={styles.supportFormLabelText}>
+                        <p className={styles.supportFormLabelText}>
                           Privide an email address to get information how you
                           can help this business to survive
-                        </span>
+                        </p>
+                      </label>
+                      <div className={styles.inputButtonWrapper}>
                         <input
                           value={this.state.emailAddress}
                           onChange={(event) => {
@@ -148,17 +166,16 @@ class BusinessesList extends Component {
                           type="email"
                           required
                         />
-                      </label>
-                      <Button type="submit">Send</Button>
+
+                        <Button type="submit">Send</Button>
+                      </div>
                       {this.state.sendEmailStatus === "loading" && (
                         <span className={styles.emailIndicator}>
                           Sending...
                         </span>
                       )}
                     </form>
-                    {this.state.sendEmailStatus === "loading" && (
-                      <span className={styles.emailIndicator}>Sending...</span>
-                    )}
+
                     <Link
                       className={styles.linkToClaim}
                       to={`claim-business/${this.state.activePlace.place_id}`}
