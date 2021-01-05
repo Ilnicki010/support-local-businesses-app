@@ -12,7 +12,7 @@
     "@turf/turf": "^5.1.6",
     "airtable": "^0.8.1",
     "authy": "^1.4.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "d3-ease": "^1.0.6",
     "dotenv": "^8.2.0",
